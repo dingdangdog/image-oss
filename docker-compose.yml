@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  image-oss:
+    image: dingdangdog/image-oss:latest
+    restart: always
+    environment:
+      TZ: "Asia/Shanghai"
+    volumes:
+      - /data/image-oss/images:/data/image-oss/images
+    ports:
+      - 11080:80
+      - 11033:11033

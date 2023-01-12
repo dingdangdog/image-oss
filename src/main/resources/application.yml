@@ -1,0 +1,12 @@
+server:
+  port: 11033
+
+spring:
+  application:
+    name: upload
+  profiles:
+    active: pro
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 12MB

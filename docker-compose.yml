@@ -12,4 +12,3 @@ services:
       - ${PWD}/application.yml:/usr/image-oss/application.yml
     ports:
       - 11080:80
-      - 11033:11033

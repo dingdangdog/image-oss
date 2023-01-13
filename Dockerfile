@@ -27,5 +27,5 @@ ENV TZ "Asia/Shanghai"
 
 COPY ./entrypoint.sh ../
 
-EXPOSE 80 11033
+EXPOSE 80
 ENTRYPOINT [ "sh","../entrypoint.sh" ]

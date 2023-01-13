@@ -18,7 +18,7 @@ image-oss初衷是搭建一个 个人图床服务。
    - `application.yml`：在[src/main/resources](./src/main/resources)文件夹下
 
 2. 修改配置文件：
-   - `application.yml`文件中的`image.url`是必须修改的选项之一，其他均可以不修改。
+   - `application.yml`文件中的`image.url`是必须修改配置项，其他均可以不修改。
  
 3. 在配置文件的所在文件夹运行指令：
 

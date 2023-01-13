@@ -10,3 +10,9 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 12MB
+
+keyList: abc
+
+image:
+  url: http://localhost:80/images/
+  path: /data/image-oss/images/

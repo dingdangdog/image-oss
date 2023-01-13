@@ -18,10 +18,10 @@ WORKDIR /usr/image-oss
 
 COPY ./target/image-oss-1.0.jar ./image-oss-1.0.jar
 COPY ./src/main/resources/application.yml ./application.yml
-COPY ./src/main/resources/application-dev.yml ./application-dev.yml
-COPY ./src/main/resources/application-pro.yml ./application-pro.yml
 
 VOLUME /data/image-oss/images/
+VOLUME /var/lib/nginx/nginx.conf
+VOLUME /usr/image-oss/application.yml
 
 ENV TZ "Asia/Shanghai"
 

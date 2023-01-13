@@ -1,6 +1,0 @@
-keyList: abc
-
-image:
-  url: http://localhost:80/images/
-  path: /data/image-oss/images/
-#  path: E:/data/image-oss/images/

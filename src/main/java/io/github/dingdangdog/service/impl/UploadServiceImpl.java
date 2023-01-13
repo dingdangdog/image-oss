@@ -41,6 +41,11 @@ public class UploadServiceImpl implements UploadService {
         for (MultipartFile file : uploadDTO.getFiles()) {
             try {
                 String fileName = UUID.randomUUID().toString();
+                String originalFilename = file.getOriginalFilename();
+                if (null != originalFilename) {
+                    String[] split = originalFilename.split("\\.");
+                    fileName = fileName + "." + split[split.length - 1];
+                }
                 fileUrls.append(imageUrl + uploadDTO.getKey() + "/");
                 fileUrls.append(fileName);
                 fileUrls.append(",");

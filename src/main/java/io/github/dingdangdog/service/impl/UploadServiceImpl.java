@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 上传
@@ -39,7 +40,7 @@ public class UploadServiceImpl implements UploadService {
         StringBuilder fileUrls = new StringBuilder();
         for (MultipartFile file : uploadDTO.getFiles()) {
             try {
-                String fileName = file.getOriginalFilename();
+                String fileName = UUID.randomUUID().toString();
                 fileUrls.append(imageUrl + uploadDTO.getKey() + "/");
                 fileUrls.append(fileName);
                 fileUrls.append(",");

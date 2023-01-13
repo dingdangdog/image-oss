@@ -2,60 +2,66 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>上传图片</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <title>上传图片</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 </head>
 
 <body style="background-color: #c1e6c6;">
-  <div class="form-group" style="text-align: center;">
+<div class="form-group" style="text-align: center;">
     <h1>上传图片工具</h1>
-    <input type="file" name="file" id="uploadImage" placeholder="请选择图片" onchange="postData()" />
+    <input type="file" name="file" id="uploadImage" placeholder="请选择图片" onchange="postData()"/>
+    <button onclick="openRp()">打开图库</button>
     <button onclick="exportAll()">导出全部图片</button>
-    <hr />
+    <hr/>
     <textarea id="imageUrl" placeholder="图片上传后，在此显示URL地址" style="width: 80%;" disabled></textarea>
-    <hr />
-    <img src="" alt="图片上传后在此显示" width="50%" id="img" />
-  </div>
+    <hr/>
+    <img src="" alt="图片上传后在此显示" width="50%" id="img"/>
+</div>
 </body>
 <script type="text/javascript">
-  // 个人密钥
-  const key = "abc";
-  // 服务地址
-  const baseUrl = "http://localhost:11033/";
-  var url = "";
+    // 个人密钥
+    const key = "abc";
+    // 服务地址
+    const baseUrl = "http://localhost:11033/";
+    var url = "";
 
-  // 上传图片
-  function postData() {
-    var formData = new FormData();
-    formData.append("key", key);
-    formData.append("files", $("#uploadImage")[0].files[0]);
-    $.ajax({
-      url: baseUrl + "upload",
-      type: "POST",
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-      crossDomain: true,
-      processData: false, // 告诉jQuery不要去处理发送的数据
-      contentType: false, // 告诉jQuery不要去设置Content-Type请求头
-      data: formData,
-      success: function (data) {
-        console.log(data);
-        url = data.urls[0];
-        document.getElementById("imageUrl").value = url;
-        $("#img").attr("src", data.urls[0]);
-      },
-      error: function (data) {
-      }
-    });
-  }
+    // 上传图片
+    function postData() {
+        var formData = new FormData();
+        formData.append("key", key);
+        formData.append("file", $("#uploadImage")[0].files[0]);
+        $.ajax({
+            url: baseUrl + "upload",
+            type: "POST",
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            },
+            crossDomain: true,
+            processData: false, // 告诉jQuery不要去处理发送的数据
+            contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+            data: formData,
+            success: function (data) {
+                console.log(data);
+                let url = data.url;
+                document.getElementById("imageUrl").value = url;
+                $("#img").attr("src", url);
+            },
+            error: function (data) {
+            }
+        });
+    }
 
-  // 导出全部图片
-  function exportAll() {
-    window.open(baseUrl + "export?key=" + key);
-  }
+    // 导出全部图片
+    function exportAll() {
+        window.open(baseUrl + "export?key=" + key);
+    }
+
+    // 导出全部图片
+    function openRp() {
+        window.open('http://localhost/images/' + key);
+    }
 </script>
 
 </html>

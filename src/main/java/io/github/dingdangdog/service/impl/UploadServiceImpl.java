@@ -30,6 +30,9 @@ public class UploadServiceImpl implements UploadService {
     @Value("${image.path}")
     private String imagePath;
 
+    @Value("${fileType}")
+    private List<String> fileType;
+
     @Override
     public ResultDTO upload(UploadDTO uploadDTO) throws IOException {
         ResultDTO resultDTO = new ResultDTO();
@@ -37,25 +40,28 @@ public class UploadServiceImpl implements UploadService {
             resultDTO.setMessage("no permission !");
             return resultDTO;
         }
-        StringBuilder fileUrls = new StringBuilder();
-        for (MultipartFile file : uploadDTO.getFiles()) {
-            try {
-                String fileName = UUID.randomUUID().toString();
-                String originalFilename = file.getOriginalFilename();
-                if (null != originalFilename) {
-                    String[] split = originalFilename.split("\\.");
-                    fileName = fileName + "." + split[split.length - 1];
+        StringBuilder fileUrl = new StringBuilder();
+        try {
+            MultipartFile file = uploadDTO.getFile();
+            String fileName = UUID.randomUUID().toString();
+            String originalFilename = file.getOriginalFilename();
+            if (null != originalFilename) {
+                String[] split = originalFilename.split("\\.");
+                String type = split[split.length - 1];
+                if (!fileType.contains(type)) {
+                    resultDTO.setMessage("Unsupported file format !");
+                    return resultDTO;
                 }
-                fileUrls.append(imageUrl + uploadDTO.getKey() + "/");
-                fileUrls.append(fileName);
-                fileUrls.append(",");
-                MultipartFileUtils.saveFile(imagePath + uploadDTO.getKey() + "/", fileName, file);
-            } catch (IOException e) {
-                throw new IOException(e);
+                fileName = fileName + "." + type;
             }
+            fileUrl.append(imageUrl + uploadDTO.getKey() + "/");
+            fileUrl.append(fileName);
+            MultipartFileUtils.saveFile(imagePath + uploadDTO.getKey() + "/", fileName, file);
+        } catch (IOException e) {
+            throw new IOException(e);
         }
-        String names = fileUrls.toString();
-        resultDTO.setUrls(names.substring(0, names.length() - 1).split(","));
+        String url = fileUrl.toString();
+        resultDTO.setUrl(url);
         return resultDTO;
     }
 }

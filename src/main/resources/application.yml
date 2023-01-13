@@ -11,6 +11,8 @@ spring:
       max-file-size: 10MB
       max-request-size: 12MB
 
+fileType: bmp,jpg,jpeg,png,tif,gif,pcx,tga,exif,fpx,svg,psd,cdr,pcd,dxf,ufo,eps,ai,raw,WMF,webp,avif,apng
+
 keyList: abc
 
 image:

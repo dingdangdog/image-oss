@@ -1,7 +1,5 @@
 package io.github.dingdangdog.entity;
 
-import java.util.Arrays;
-
 /**
  * 返回值
  *
@@ -10,14 +8,14 @@ import java.util.Arrays;
  */
 public class ResultDTO {
     private String message;
-    private String[] urls;
+    private String url;
 
-    public String[] getUrls() {
-        return urls;
+    public String getUrl() {
+        return url;
     }
 
-    public void setUrls(String[] urls) {
-        this.urls = urls;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getMessage() {
@@ -32,7 +30,7 @@ public class ResultDTO {
     public String toString() {
         return "ResultDTO{" +
                 "message='" + message + '\'' +
-                ", urls=" + Arrays.toString(urls) +
+                ", url=" + url +
                 '}';
     }
 }

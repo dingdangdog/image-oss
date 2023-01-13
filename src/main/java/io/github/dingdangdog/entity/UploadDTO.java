@@ -2,8 +2,6 @@ package io.github.dingdangdog.entity;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 /**
  * 上传图片
  *
@@ -12,7 +10,7 @@ import java.util.List;
  */
 public class UploadDTO {
     private String key;
-    private List<MultipartFile> files;
+    private MultipartFile file;
 
     public String getKey() {
         return key;
@@ -22,19 +20,19 @@ public class UploadDTO {
         this.key = key;
     }
 
-    public List<MultipartFile> getFiles() {
-        return files;
+    public MultipartFile getFile() {
+        return file;
     }
 
-    public void setFiles(List<MultipartFile> files) {
-        this.files = files;
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 
     @Override
     public String toString() {
         return "UploadDTO{" +
                 "key='" + key + '\'' +
-                ", files=" + files +
+                ", files=" + file +
                 '}';
     }
 }

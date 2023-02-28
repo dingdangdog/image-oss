@@ -9,6 +9,7 @@ services:
     volumes:
       - ${PWD}/images:/data/image-oss/images
       - ${PWD}/nginx.conf:/var/lib/nginx/nginx.conf
+      - ${PWD}/html:/var/lib/nginx/html
       - ${PWD}/application.yml:/usr/image-oss/application.yml
     ports:
       - 11080:80

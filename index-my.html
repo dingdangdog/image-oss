@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>上传图片</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body style="background-color: #c1e6c6;">
+  <div class="form-group" style="text-align: center;">
+    <h1>上传图片工具</h1>
+    请输入授权码：<input type="text" name="key" id="key" placeholder="未授权无法上传"/>
+    请输入水印内容：<input type="text" name="watermark" id="watermark" placeholder="为空不加水印"/>
+    <input type="file" name="file" id="uploadImage" placeholder="请选择图片" onchange="postData()" />
+    <button onclick="openRp()">打开图库</button>
+    <button onclick="exportAll()">导出全部图片</button>
+    <hr />
+    <textarea id="imageUrl" placeholder="图片上传后，在此显示URL地址" style="width: 80%;" disabled></textarea>
+    <hr />
+    <img src="" alt="图片上传后在此显示" width="50%" id="img" />
+  </div>
+</body>
+<script type="text/javascript">
+  // 服务地址
+  const baseUrl = "https://images.oldmoon.top/api/";
+
+  window.onload = function () {
+      $("#watermark").val("https://oldmoon.top");
+  }
+
+  // 上传图片
+  function postData() {
+    var formData = new FormData();
+    formData.append("key", $("#key").val());
+	formData.append("file", $("#uploadImage")[0].files[0]);
+    formData.append("waterMark", $("#watermark").val());
+    $.ajax({
+      url: baseUrl + "upload",
+      type: "POST",
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      crossDomain: true,
+      processData: false, // 告诉jQuery不要去处理发送的数据
+      contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+      data: formData,
+      success: function (data) {
+		console.log(data);
+		let url = data.url;
+		document.getElementById("imageUrl").value = url;
+		$("#img").attr("src", url);
+      },
+      error: function (data) {
+      }
+    });
+  }
+
+  // 导出全部图片
+  function exportAll() {
+    window.open(baseUrl + "export?key=" + key);
+  }
+  
+  
+    // 打开图库
+    function openRp() {
+        window.open('https://images.oldmoon.top/images/' + $("#key").val());
+    }
+</script>
+
+</html>

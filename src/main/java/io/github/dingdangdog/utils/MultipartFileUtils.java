@@ -1,11 +1,15 @@
 package io.github.dingdangdog.utils;
 
+import io.github.dingdangdog.entity.FileInfo;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 
 /**
  * MultipartFile工具类
@@ -40,11 +44,21 @@ public class MultipartFileUtils {
         return info.toString();
     }
 
-    public static void saveFile(String filePath, String fileName, MultipartFile file) throws IOException {
-        File targetFile = new File(filePath, fileName);
+    public static void saveFile(FileInfo fileInfo, String waterMark, MultipartFile file) throws IOException {
+        File targetFile = new File(fileInfo.getFilePath(), fileInfo.getFileName());
+
         if (!targetFile.getParentFile().exists()) {
             targetFile.getParentFile().mkdirs();
         }
         file.transferTo(targetFile);
     }
+
+    public static void backupFile(FileInfo fileInfo) throws IOException {
+        File backFile = new File(fileInfo.getFilePath() + "backup/", fileInfo.getFileName());
+        if (!backFile.getParentFile().exists()) {
+            backFile.getParentFile().mkdirs();
+        }
+        Files.copy(new File(fileInfo.getFilePath(), fileInfo.getFileName()).toPath(), backFile.toPath());
+    }
+
 }

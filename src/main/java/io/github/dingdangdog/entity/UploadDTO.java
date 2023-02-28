@@ -9,7 +9,14 @@ import org.springframework.web.multipart.MultipartFile;
  * @since 2023/1/11
  */
 public class UploadDTO {
+    /**
+     * 个人ID，用于确定是否有权上传和文件分类
+     */
     private String key;
+    /**
+     * 水印内容
+     */
+    private String waterMark;
     private MultipartFile file;
 
     public String getKey() {
@@ -18,6 +25,14 @@ public class UploadDTO {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getWaterMark() {
+        return waterMark;
+    }
+
+    public void setWaterMark(String waterMark) {
+        this.waterMark = waterMark;
     }
 
     public MultipartFile getFile() {
@@ -32,6 +47,7 @@ public class UploadDTO {
     public String toString() {
         return "UploadDTO{" +
                 "key='" + key + '\'' +
+                ", waterMark='" + waterMark + '\'' +
                 ", files=" + file +
                 '}';
     }

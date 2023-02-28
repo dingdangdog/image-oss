@@ -59,7 +59,7 @@ docker-compose up -d
 
 ### 前端
 
-因为该项目的初衷是个人使用，所以前端追求简单易用。前端只有一个文件：[uploadImages.html](./uploadImages.html)。
+因为该项目的初衷是个人使用，所以前端追求简单易用。前端只有一个文件：[index.html](./index.html)。
 
 使用该文件的方法是：**下载到本地，使用任意浏览器打开即可。**
 

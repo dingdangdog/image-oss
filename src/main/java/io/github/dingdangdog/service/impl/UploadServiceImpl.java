@@ -49,7 +49,7 @@ public class UploadServiceImpl implements UploadService {
         ResultDTO resultDTO = new ResultDTO();
         if (!userProperties.keyMap.containsKey(uploadDTO.getKey())) {
             resultDTO.setCode(500);
-            resultDTO.setMessage("no permission!");
+            resultDTO.setMessage("No Permission!");
             return resultDTO;
         }
         String key = uploadDTO.getKey();

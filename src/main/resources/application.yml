@@ -16,7 +16,7 @@ fileType:
 # 服务信息配置
 info:
   server-url: http://localhost:80
-  base-image-url: ${info.server-url}/image/
+  base-image-url: ${info.server-url}/images/
 #  base-api-url: ${info.server-url}/api/
 #  water-mark: https://oldmoon.top
 

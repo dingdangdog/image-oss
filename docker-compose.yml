@@ -8,8 +8,6 @@ services:
       TZ: "Asia/Shanghai"
     volumes:
       - ${PWD}/images:/data/image-oss/images
-      - ${PWD}/nginx.conf:/var/lib/nginx/nginx.conf
-      - ${PWD}/html:/var/lib/nginx/html
-      - ${PWD}/application.yml:/usr/image-oss/application.yml
+      - ${PWD}/application.yml:/usr/image-oss/jar/application.yml
     ports:
       - 11080:80

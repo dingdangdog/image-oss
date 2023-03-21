@@ -36,11 +36,11 @@ public class ImageUtils {
         g.drawImage(imageFile, 0, 0, imageFileWidth, imageFileHeight, null);
         //-------------------------文字水印 start----------------------------
         // 根据图片的背景设置水印颜色
-        g.setColor(new Color(255, 255, 255, 160));
+        g.setColor(new Color(212, 206, 206, 164));
         // 如果需要，请获取系统字体，防止无字体导致报错
 //        Font font = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()[0];
         // 设置字体 加粗，文字大小为60pt
-        g.setFont(new Font("微软雅黑", Font.BOLD, 12));
+        g.setFont(new Font("微软雅黑", Font.BOLD, 20));
         // 水印内容
         String waterMarkContent = "@" + waterMark;
         // 设置水印的坐标(为原图片中间位置)

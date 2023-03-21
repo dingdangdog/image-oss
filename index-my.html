@@ -10,24 +10,33 @@
 
 <body style="background-color: #c1e6c6;">
   <div class="form-group" style="text-align: center;">
-    <h1>上传图片工具</h1>
-    请输入授权码：<input type="text" name="key" id="key" placeholder="未授权无法上传"/>
-    请输入水印内容：<input type="text" name="watermark" id="watermark" placeholder="为空不加水印"/>
+    <h1>图床工具</h1>
+    <label for="key">请输入授权码：</label><input type="text" name="key" id="key" placeholder="未授权无法上传"/>
+    <label for="watermark">请输入水印内容：</label><input type="text" name="watermark" id="watermark" placeholder="为空不加水印"/>
     <input type="file" name="file" id="uploadImage" placeholder="请选择图片" onchange="postData()" />
     <button onclick="openRp()">打开图库</button>
     <button onclick="exportAll()">导出全部图片</button>
     <hr />
-    <textarea id="imageUrl" placeholder="图片上传后，在此显示URL地址" style="width: 80%;" disabled></textarea>
+    <label for="imageUrl">水印图</label><br/>
+    <textarea id="imageUrl" placeholder="如果加水印，图片上传后，在此显示带水印图片的URL地址" style="width: 80%;" disabled></textarea>
     <hr />
-    <img src="" alt="图片上传后在此显示" width="50%" id="img" />
+    <img src="" alt="水印图，图片上传后在此显示" width="50%" id="img" />
+    <hr />
+    <label for="backupUrl">原图</label><br/>
+    <textarea id="backupUrl" placeholder="如果加水印，并在此显示原图URL地址" style="width: 80%;" disabled></textarea>
+    <hr />
+    <img src="" alt="原图，图片上传后在此显示" width="50%" id="backupImg" />
   </div>
 </body>
 <script type="text/javascript">
   // 服务地址
   const baseUrl = "https://images.oldmoon.top/api/";
+  // 水印内容
+  const waterMark = "https://oldmoon.top";
 
   window.onload = function () {
-      $("#watermark").val("https://oldmoon.top");
+    $("#watermark").val(waterMark);
+    $("#key").val(window.localStorage.getItem("key"));
   }
 
   // 上传图片
@@ -47,12 +56,27 @@
       contentType: false, // 告诉jQuery不要去设置Content-Type请求头
       data: formData,
       success: function (data) {
-		console.log(data);
-		let url = data.url;
-		document.getElementById("imageUrl").value = url;
-		$("#img").attr("src", url);
+        if (data.code === 200) {
+          console.log(data);
+          // 将个人授权码保存到localStorage
+          window.localStorage.setItem("key", $("#key").val());
+
+          // 导入后图片
+          let url = data.url;
+          document.getElementById("imageUrl").value = url;
+          $("#img").attr("src", url);
+          // 原图备份
+          let backupUrl = data.backupUrl;
+          if (backupUrl){
+            document.getElementById("backupUrl").value = backupUrl;
+            $("#backupImg").attr("src", backupUrl);
+          }
+        } else {
+          alert(data.message);
+        }
       },
       error: function (data) {
+        alert("System Error!");
       }
     });
   }
@@ -61,12 +85,11 @@
   function exportAll() {
     window.open(baseUrl + "export?key=" + $("#key").val());
   }
-  
-  
+
     // 打开图库
-    function openRp() {
-        window.open('https://images.oldmoon.top/images/' + $("#key").val());
-    }
+  function openRp() {
+      window.open('https://images.oldmoon.top/images/' + $("#key").val());
+  }
 </script>
 
 </html>

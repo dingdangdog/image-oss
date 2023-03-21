@@ -87,6 +87,9 @@
                     if (backupUrl) {
                         document.getElementById("backupUrl").value = backupUrl;
                         $("#backupImg").attr("src", backupUrl);
+                    } else {
+                        document.getElementById("backupUrl").value = null;
+                        $("#backupImg").attr("src", null);
                     }
                 } else {
                     alert(data.message);

@@ -1,9 +1,11 @@
 package io.github.dingdangdog.service.impl;
 
+import io.github.dingdangdog.config.ServerProperties;
 import io.github.dingdangdog.config.UserProperties;
 import io.github.dingdangdog.entity.FileInfo;
 import io.github.dingdangdog.entity.ResultDTO;
 import io.github.dingdangdog.entity.UploadDTO;
+import io.github.dingdangdog.entity.UploadResultDTO;
 import io.github.dingdangdog.service.UploadService;
 import io.github.dingdangdog.utils.ImageUtils;
 import io.github.dingdangdog.utils.MultipartFileUtils;
@@ -28,11 +30,13 @@ import java.util.UUID;
 public class UploadServiceImpl implements UploadService {
     @Autowired
     private UserProperties userProperties;
-    @Value("${image.url}")
-    private String imageUrl;
+    @Autowired
+    private ServerProperties serverProperties;
+    /**
+     * 图片存储路径
+     */
     @Value("${image.path}")
     private String imagePath;
-
     /**
      * 支持上传的文件类型
      */
@@ -46,7 +50,7 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public ResultDTO upload(UploadDTO uploadDTO) {
-        ResultDTO resultDTO = new ResultDTO();
+        UploadResultDTO resultDTO = new UploadResultDTO();
         if (!userProperties.keyMap.containsKey(uploadDTO.getKey())) {
             resultDTO.setCode(500);
             resultDTO.setMessage("No Permission!");
@@ -78,7 +82,7 @@ public class UploadServiceImpl implements UploadService {
             }
             fileInfo.setFilePath(imagePath + userProperties.keyMap.get(key) + "/");
             // 组装加水印后图片地址
-            fileUrl.append(imageUrl)
+            fileUrl.append(serverProperties.baseImageUrl)
                     .append(userProperties.keyMap.get(key))
                     .append("/")
                     .append(fileName)
@@ -99,7 +103,7 @@ public class UploadServiceImpl implements UploadService {
                 }
                 ImageUtils.addWatermark(fileInfo, uploadDTO.getWaterMark());
                 // 组装原图备份地址
-                backupFileUrl.append(imageUrl)
+                backupFileUrl.append(serverProperties.baseImageUrl)
                         .append(userProperties.keyMap.get(key))
                         .append("/backup/")
                         .append(fileName)

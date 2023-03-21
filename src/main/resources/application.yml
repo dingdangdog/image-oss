@@ -13,11 +13,19 @@ fileType:
   up: bmp,jpg,jpeg,png,tif,gif,pcx,tga,exif,fpx,svg,psd,cdr,pcd,dxf,ufo,eps,ai,raw,WMF,webp,avif,apng
   wm: jpg,jpeg,png
 
-image:
-  url: http://localhost:80/image/
-#  path: /data/image-oss/images/
-  path: E:/image/
+# 服务信息配置
+info:
+  server-url: http://localhost:80
+  base-image-url: ${info.server-url}/image/
+#  base-api-url: ${info.server-url}/api/
+#  water-mark: https://oldmoon.top
 
+# 图片存储配置
+image:
+  path: /data/image-oss/images/
+#  path: E:/image/
+
+# 个人认证码（授权码）配置
 user:
   key-map:
     testKey: test

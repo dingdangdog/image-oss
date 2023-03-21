@@ -1,9 +1,10 @@
 package io.github.dingdangdog.controller;
 
+import io.github.dingdangdog.config.ServerProperties;
 import io.github.dingdangdog.config.UserProperties;
 import io.github.dingdangdog.entity.ResultDTO;
+import io.github.dingdangdog.entity.StoreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class StoreController {
     @Autowired
     private UserProperties userProperties;
-    @Value("${image.url}")
-    private String imageUrl;
+    @Autowired
+    private ServerProperties serverProperties;
 
     /**
      * 获取图库地址
@@ -32,14 +33,14 @@ public class StoreController {
      */
     @GetMapping("/getStoreUrl")
     public ResultDTO getStoreUrl(String key) {
-        ResultDTO resultDTO = new ResultDTO();
+        StoreDTO storeDTO = new StoreDTO();
         if (userProperties.keyMap.containsKey(key)) {
-            resultDTO.setCode(200);
-            resultDTO.setUrl(imageUrl + userProperties.keyMap.get(key) + "/");
-            return resultDTO;
+            storeDTO.setCode(200);
+            storeDTO.setUrl(serverProperties.baseImageUrl + userProperties.keyMap.get(key) + "/");
+            return storeDTO;
         }
-        resultDTO.setCode(500);
-        resultDTO.setMessage("No Permission!");
-        return resultDTO;
+        storeDTO.setCode(500);
+        storeDTO.setMessage("No Permission!");
+        return storeDTO;
     }
 }

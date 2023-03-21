@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>上传图片</title>
+    <title>图床工具</title>
+    <link rel="icon" href="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
@@ -17,13 +18,13 @@
     <button onclick="openRp()">打开图库</button>
     <button onclick="exportAll()">导出全部图片</button>
     <hr />
-    <label for="imageUrl">水印图</label><br/>
-    <textarea id="imageUrl" placeholder="如果加水印，图片上传后，在此显示带水印图片的URL地址" style="width: 80%;" disabled></textarea>
+    <label for="imageUrl"><h4>水印图</h4></label>
+    <textarea id="imageUrl" placeholder="如果加水印，将在此显示带水印图URL地址，如果不加水印，将在此显示原图URL地址" style="width: 80%;" disabled></textarea>
     <hr />
     <img src="" alt="水印图，图片上传后在此显示" width="50%" id="img" />
     <hr />
-    <label for="backupUrl">原图</label><br/>
-    <textarea id="backupUrl" placeholder="如果加水印，并在此显示原图URL地址" style="width: 80%;" disabled></textarea>
+    <label for="backupUrl"><h4>原图</h4></label>
+    <textarea id="backupUrl" placeholder="如果加水印，将在此显示原图URL地址，如果不加水印，此处不显示" style="width: 80%;" disabled></textarea>
     <hr />
     <img src="" alt="原图，图片上传后在此显示" width="50%" id="backupImg" />
 </div>
@@ -85,12 +86,38 @@
 
     // 导出全部图片
     function exportAll() {
-        window.open(baseUrl + "export?key=" + key);
+        window.open(baseUrl + "export?key=" + $("#key").val());
     }
 
     // 打开图库
     function openRp() {
-        window.open('http://localhost/images/' + key);
+        $.ajax({
+            url: baseUrl + "store/getStoreUrl?key=" + $("#key").val(),
+            type: "GET",
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            },
+            crossDomain: true,
+            processData: false, // 告诉jQuery不要去处理发送的数据
+            contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+            success: function (data) {
+                if (data.code === 200) {
+                    console.log(data);
+                    window.localStorage.setItem("key", $("#key").val());
+
+                    // 导入后图片
+                    let url = data.url;
+                    if (url) {
+                        window.open(url);
+                    }
+                } else {
+                    alert(data.message);
+                }
+            },
+            error: function (data) {
+                alert("System Error!");
+            }
+        });
     }
 </script>
 

@@ -13,7 +13,7 @@ RUN fc-cache --force
 
 # 前端
 RUN mkdir /run/nginx
-RUN apk --no-cache add nginx
+RUN apk add --no-cache nginx
 
 COPY ./nginx/nginx.conf /var/lib/nginx/nginx.conf
 COPY ./nginx/mime.types /var/lib/nginx/mime.types
@@ -24,7 +24,7 @@ COPY ./index.html /var/lib/nginx/html/index.html
 # 后端
 WORKDIR /usr/image-oss/jar
 
-COPY ./target/image-oss-1.1.jar ./image-oss-1.1.jar
+COPY ./target/image-oss-1.2.jar ./image-oss-1.2.jar
 COPY ./src/main/resources/application.yml ./application.yml
 
 # 容器数据卷

@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: upload
+    name: image-oss
   servlet:
     multipart:
       max-file-size: 30MB

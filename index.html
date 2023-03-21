@@ -3,7 +3,7 @@
 
 <head>
     <title>图床工具</title>
-    <link rel="icon" href="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png" />
+    <link rel="icon" href="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
@@ -13,44 +13,46 @@
 <div class="form-group" style="text-align: center;">
     <h1>图床工具</h1>
     <label for="key">请输入授权码：</label><input type="text" name="key" id="key" placeholder="未授权无法上传"/>
-    <label for="watermark">请输入水印内容：</label><input type="text" name="watermark" id="watermark" placeholder="为空不加水印"/>
+    <label for="watermark">请输入水印内容：</label><input type="text" name="watermark" id="watermark"
+                                                         placeholder="为空不加水印"/>
     <input type="file" name="file" id="uploadImage" placeholder="请选择图片" onchange="postData()"/>
     <button onclick="openRp()">打开图库</button>
     <button onclick="exportAll()">导出全部图片</button>
-    <hr />
+    <hr/>
     <label for="imageUrl"><h4>水印图</h4></label>
-    <textarea id="imageUrl" placeholder="如果加水印，将在此显示带水印图URL地址，如果不加水印，将在此显示原图URL地址" style="width: 80%;" disabled></textarea>
-    <hr />
-    <img src="" alt="水印图，图片上传后在此显示" width="50%" id="img" />
-    <hr />
+    <textarea id="imageUrl" placeholder="如果加水印，将在此显示带水印图URL地址，如果不加水印，将在此显示原图URL地址"
+              style="width: auto;" disabled></textarea>
+    <hr/>
+    <img src="" alt="水印图，图片上传后在此显示" width="50%" id="img"/>
+    <hr/>
     <label for="backupUrl"><h4>原图</h4></label>
-    <textarea id="backupUrl" placeholder="如果加水印，将在此显示原图URL地址，如果不加水印，此处不显示" style="width: 80%;" disabled></textarea>
-    <hr />
-    <img src="" alt="原图，图片上传后在此显示" width="50%" id="backupImg" />
+    <textarea id="backupUrl" placeholder="如果加水印，将在此显示原图URL地址，如果不加水印，此处不显示" style="width: auto;"
+              disabled></textarea>
+    <hr/>
+    <img src="" alt="原图，图片上传后在此显示" width="auto" style="max-width: 50%" id="backupImg"/>
 </div>
 </body>
 <script type="text/javascript">
+    const serverUrl = window.location.href;
     // 服务地址
-    const baseUrl = "http://localhost/api/";
-    // 水印内容
-    const waterMark = "http://localhost";
+    const baseApiUrl = serverUrl + "/api/";
 
     window.onload = function () {
         $("#key").val(window.localStorage.getItem("key"));
-        $("#watermark").val(waterMark);
+        $("#watermark").val(window.localStorage.getItem("waterMark"));
     }
 
     // 上传图片
     function postData() {
         if (!$("#uploadImage")[0].files[0]) {
-          return;
+            return;
         }
         var formData = new FormData();
         formData.append("key", $("#key").val());
         formData.append("file", $("#uploadImage")[0].files[0]);
         formData.append("waterMark", $("#watermark").val());
         $.ajax({
-            url: baseUrl + "upload",
+            url: baseApiUrl + "upload",
             type: "POST",
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -63,6 +65,7 @@
                 if (data.code === 200) {
                     console.log(data);
                     window.localStorage.setItem("key", $("#key").val());
+                    window.localStorage.setItem("waterMark", $("#watermark").val());
 
                     // 导入后图片
                     let url = data.url;
@@ -70,7 +73,7 @@
                     $("#img").attr("src", url);
                     // 原图备份
                     let backupUrl = data.backupUrl;
-                    if (backupUrl){
+                    if (backupUrl) {
                         document.getElementById("backupUrl").value = backupUrl;
                         $("#backupImg").attr("src", backupUrl);
                     }
@@ -86,13 +89,13 @@
 
     // 导出全部图片
     function exportAll() {
-        window.open(baseUrl + "export?key=" + $("#key").val());
+        window.open(baseApiUrl + "export?key=" + $("#key").val());
     }
 
     // 打开图库
     function openRp() {
         $.ajax({
-            url: baseUrl + "store/getStoreUrl?key=" + $("#key").val(),
+            url: baseApiUrl + "store/getStoreUrl?key=" + $("#key").val(),
             type: "GET",
             headers: {
                 'Access-Control-Allow-Origin': '*',

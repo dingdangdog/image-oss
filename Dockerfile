@@ -29,8 +29,6 @@ COPY ./src/main/resources/application.yml ./application.yml
 
 # 容器数据卷
 VOLUME /data/image-oss/images/
-VOLUME /var/lib/nginx/nginx.conf
-VOLUME /var/lib/nginx/html/index.html
 VOLUME /usr/image-oss/jar/application.yml
 
 ENV TZ "Asia/Shanghai"

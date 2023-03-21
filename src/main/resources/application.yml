@@ -6,15 +6,19 @@ spring:
     name: upload
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 12MB
+      max-file-size: 30MB
+      max-request-size: 35MB
 
 fileType:
   up: bmp,jpg,jpeg,png,tif,gif,pcx,tga,exif,fpx,svg,psd,cdr,pcd,dxf,ufo,eps,ai,raw,WMF,webp,avif,apng
   wm: jpg,jpeg,png
 
-keyList: abc
-
 image:
-  url: http://localhost:80/images/
-  path: /data/image-oss/images/
+  url: http://localhost:80/image/
+#  path: /data/image-oss/images/
+  path: E:/image/
+
+user:
+  key-map:
+    testKey: test
+    testKey2: test2

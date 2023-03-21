@@ -26,7 +26,7 @@ public class UploadController {
     private UploadService uploadService;
 
     @PostMapping()
-    public ResultDTO upload(UploadDTO uploadDTO) throws IOException {
+    public ResultDTO upload(UploadDTO uploadDTO) {
         return uploadService.upload(uploadDTO);
     }
 }

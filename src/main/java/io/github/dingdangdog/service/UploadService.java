@@ -12,5 +12,5 @@ import java.io.IOException;
  * @since 2023/1/11
  */
 public interface UploadService {
-    ResultDTO upload(UploadDTO uploadDTO) throws IOException;
+    ResultDTO upload(UploadDTO uploadDTO);
 }

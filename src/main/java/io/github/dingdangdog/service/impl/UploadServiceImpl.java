@@ -1,11 +1,13 @@
 package io.github.dingdangdog.service.impl;
 
+import io.github.dingdangdog.config.UserProperties;
 import io.github.dingdangdog.entity.FileInfo;
 import io.github.dingdangdog.entity.ResultDTO;
 import io.github.dingdangdog.entity.UploadDTO;
 import io.github.dingdangdog.service.UploadService;
 import io.github.dingdangdog.utils.ImageUtils;
 import io.github.dingdangdog.utils.MultipartFileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -23,13 +26,10 @@ import java.util.UUID;
  */
 @Service
 public class UploadServiceImpl implements UploadService {
-
+    @Autowired
+    private UserProperties userProperties;
     @Value("${image.url}")
     private String imageUrl;
-
-    @Value("${keyList}")
-    private List<String> keyList;
-
     @Value("${image.path}")
     private String imagePath;
 
@@ -45,12 +45,14 @@ public class UploadServiceImpl implements UploadService {
     private List<String> wmFileType;
 
     @Override
-    public ResultDTO upload(UploadDTO uploadDTO) throws IOException {
+    public ResultDTO upload(UploadDTO uploadDTO) {
         ResultDTO resultDTO = new ResultDTO();
-        if (!keyList.contains(uploadDTO.getKey())) {
-            resultDTO.setMessage("no permission !");
+        if (!userProperties.keyMap.containsKey(uploadDTO.getKey())) {
+            resultDTO.setCode(500);
+            resultDTO.setMessage("no permission!");
             return resultDTO;
         }
+        String key = uploadDTO.getKey();
         // 用于组装图片URL
         StringBuilder fileUrl = new StringBuilder();
         StringBuilder backupFileUrl = new StringBuilder();
@@ -59,7 +61,7 @@ public class UploadServiceImpl implements UploadService {
         try {
             MultipartFile file = uploadDTO.getFile();
             // 重新生成文件名
-            String fileName = uploadDTO.getKey() + System.currentTimeMillis();
+            String fileName = userProperties.keyMap.get(key) + System.currentTimeMillis();
             String originalFilename = file.getOriginalFilename();
             String type = null;
             if (null != originalFilename) {
@@ -67,16 +69,17 @@ public class UploadServiceImpl implements UploadService {
                 type = split[split.length - 1];
                 // 校验文件类型
                 if (!fileType.contains(type)) {
-                    resultDTO.setMessage("Uploaded file type is not supported !");
+                    resultDTO.setCode(500);
+                    resultDTO.setMessage("Uploaded file type is not supported!");
                     return resultDTO;
                 }
                 fileInfo.setFileType(type);
                 fileInfo.setFileName(fileName + "." + type);
             }
-            fileInfo.setFilePath(imagePath + uploadDTO.getKey() + "/");
+            fileInfo.setFilePath(imagePath + userProperties.keyMap.get(key) + "/");
             // 组装加水印后图片地址
             fileUrl.append(imageUrl)
-                    .append(uploadDTO.getKey())
+                    .append(userProperties.keyMap.get(key))
                     .append("/")
                     .append(fileName)
                     .append(".")
@@ -90,13 +93,14 @@ public class UploadServiceImpl implements UploadService {
             // 添加水印
             if (!StringUtils.isEmpty(uploadDTO.getWaterMark())) {
                 if (!wmFileType.contains(type)) {
-                    resultDTO.setMessage("The file type with watermark is not supported !");
+                    resultDTO.setCode(500);
+                    resultDTO.setMessage("The file type with watermark is not supported!");
                     return resultDTO;
                 }
                 ImageUtils.addWatermark(fileInfo, uploadDTO.getWaterMark());
                 // 组装原图备份地址
                 backupFileUrl.append(imageUrl)
-                        .append(uploadDTO.getKey())
+                        .append(userProperties.keyMap.get(key))
                         .append("/backup/")
                         .append(fileName)
                         .append(".")
@@ -106,8 +110,12 @@ public class UploadServiceImpl implements UploadService {
                 resultDTO.setBackupUrl(backupUrl);
             }
         } catch (IOException e) {
-            throw new IOException(e);
+            resultDTO.setCode(500);
+            resultDTO.setMessage("Unknown Exception!");
+            return resultDTO;
+//            throw new IOException(e);
         }
+        resultDTO.setCode(200);
         return resultDTO;
     }
 }

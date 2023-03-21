@@ -24,7 +24,7 @@ COPY ./index.html /var/lib/nginx/html/index.html
 # 后端
 WORKDIR /usr/image-oss/jar
 
-COPY ./target/image-oss-1.2.jar ./image-oss-1.2.jar
+COPY ./target/image-oss-1.2.jar ./image-oss.jar
 COPY ./src/main/resources/application.yml ./application.yml
 
 # 容器数据卷

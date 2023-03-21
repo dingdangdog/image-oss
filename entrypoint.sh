@@ -4,4 +4,4 @@ echo "**提示：建议私人使用，不要公开服务信息！**"
 echo "===================================================="
 
 nginx -c /var/lib/nginx/nginx.conf
-java -jar /usr/image-oss/jar/image-oss-1.1.jar
+java -jar /usr/image-oss/jar/image-oss.jar

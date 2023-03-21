@@ -7,10 +7,19 @@ package io.github.dingdangdog.entity;
  * @since 2023/1/11
  */
 public class ResultDTO {
+    private Integer code;
     private String message;
     private String url;
 
     private String backupUrl;
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
 
     public String getUrl() {
         return url;

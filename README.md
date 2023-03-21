@@ -111,5 +111,5 @@ Nginx在项目中起到很重要的作用，主要有：
 
 > 示例页面可能与最新版页面有所差异，但功能大致相同。
 
-![images-oss](https://images.oldmoon.top/images/dingdangdog/dingdangdog1679388368774.gif)
+![images-oss](./images-oss.gif)
 

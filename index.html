@@ -11,23 +11,34 @@
 
 <body style="background-color: #c1e6c6;">
 <div class="form-group" style="text-align: center;">
-    <h1>图床工具</h1>
+    <h1 style="display: flex; justify-content: center">
+        <img src="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png" width="40px" />
+        &nbsp;图床工具
+    </h1>
+    <input type="file" name="file" id="uploadImage" placeholder="请选择图片" onchange="postData()"/>
+    <button onclick="clearSelect()">清除选择</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button onclick="openRp()">打开图库</button>
+    <button onclick="exportAll()">导出全部图片</button>
+
+    <hr/>
     <label for="key">请输入授权码：</label><input type="text" name="key" id="key" placeholder="未授权无法上传"/>
     <label for="watermark">请输入水印内容：</label><input type="text" name="watermark" id="watermark"
                                                          placeholder="为空不加水印"/>
-    <input type="file" name="file" id="uploadImage" placeholder="请选择图片" onchange="postData()"/>
-    <button onclick="openRp()">打开图库</button>
-    <button onclick="exportAll()">导出全部图片</button>
+
     <hr/>
     <label for="imageUrl"><h4>水印图</h4></label>
     <textarea id="imageUrl" placeholder="如果加水印，将在此显示带水印图URL地址，如果不加水印，将在此显示原图URL地址"
-              style="width: auto;" disabled></textarea>
+              style="width: 80%;" disabled></textarea>
+
     <hr/>
     <img src="" alt="水印图，图片上传后在此显示" width="50%" id="img"/>
+
     <hr/>
     <label for="backupUrl"><h4>原图</h4></label>
-    <textarea id="backupUrl" placeholder="如果加水印，将在此显示原图URL地址，如果不加水印，此处不显示" style="width: auto;"
+    <textarea id="backupUrl" placeholder="如果加水印，将在此显示原图URL地址，如果不加水印，此处不显示" style="width: 80%;"
               disabled></textarea>
+
     <hr/>
     <img src="" alt="原图，图片上传后在此显示" width="auto" style="max-width: 50%" id="backupImg"/>
 </div>
@@ -85,6 +96,10 @@
                 alert("System Error!");
             }
         });
+    }
+
+    function clearSelect(){
+        $("#uploadImage").val(null);
     }
 
     // 导出全部图片

@@ -3,7 +3,7 @@ image-oss
 
 ## 简介
 
-image-oss初衷是搭建一个 个人图床服务。
+image-oss初衷是搭建一个 个人图床服务。演示站：[http://image-oss-demo.oldmoon.top/](http://image-oss-demo.oldmoon.top/)
 
 > 互联网各种图床看的眼花缭乱，用起来还需要配置各种东西，所以我想搭建一个自己的图床服务，这样用起来更加顺手。
 

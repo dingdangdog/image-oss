@@ -6,8 +6,8 @@ spring:
     name: image-oss
   servlet:
     multipart:
-      max-file-size: 30MB
-      max-request-size: 35MB
+      max-file-size: 10MB
+      max-request-size: 15MB
 
 fileType:
   up: bmp,jpg,jpeg,png,tif,gif,pcx,tga,exif,fpx,svg,psd,cdr,pcd,dxf,ufo,eps,ai,raw,WMF,webp,avif,apng

@@ -1,5 +1,5 @@
 # 运行容器
-FROM openjdk:8-alpine as RUNNER
+FROM openjdk:17-jdk-alpine as RUNNER
 
 LABEL author.name="DingDangDog"
 LABEL author.email="dddogx@qq.com"
@@ -20,11 +20,12 @@ COPY ./nginx/mime.types /var/lib/nginx/mime.types
 
 #RUN mkdir /var/lib/nginx/html
 COPY ./index.html /var/lib/nginx/html/index.html
+COPY ./store.html /var/lib/nginx/html/store.html
 
 # 后端
 WORKDIR /usr/image-oss/jar
 
-COPY ./target/image-oss-1.2.jar ./image-oss.jar
+COPY ./target/image-oss-1.3.jar ./image-oss.jar
 COPY ./src/main/resources/application.yml ./application.yml
 
 # 容器数据卷

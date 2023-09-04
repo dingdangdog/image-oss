@@ -12,14 +12,14 @@
 <body style="background-color: #c1e6c6;">
 <div class="form-group" style="text-align: center;">
     <h1 style="display: flex; justify-content: center">
-        <img src="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png" width="40px" />
+        <img src="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png" width="40px"/>
         &nbsp;图床工具
     </h1>
     <input type="file" name="file" id="uploadImage" placeholder="请选择图片" onchange="postData()"/>
     <button onclick="clearSelect()">清除选择</button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <button onclick="openRp()">打开图库</button>
-    <button onclick="exportAll()">导出全部图片</button>
+    <!--    <button onclick="exportAll()">导出全部图片</button>-->
 
     <hr/>
     <label for="key">请输入授权码：</label><input type="text" name="key" id="key" placeholder="未授权无法上传"/>
@@ -44,7 +44,11 @@
 </div>
 </body>
 <script type="text/javascript">
-    const serverUrl = window.location.href;
+    // 获取当前网页的协议（http 或 https）
+    const protocol = window.location.protocol;
+    // 获取当前网页的主机名和端口
+    const host = window.location.host;
+    const serverUrl = protocol + "//" + host;
     // 服务地址
     const baseApiUrl = serverUrl + "/api/";
 
@@ -56,6 +60,12 @@
     // 上传图片
     function postData() {
         if (!$("#uploadImage")[0].files[0]) {
+            return;
+        }
+        if ($("#key").val()) {
+            window.localStorage.setItem("key", $("#key").val());
+        } else {
+            alert("请输入授权码!");
             return;
         }
         var formData = new FormData();
@@ -101,7 +111,7 @@
         });
     }
 
-    function clearSelect(){
+    function clearSelect() {
         $("#uploadImage").val(null);
     }
 
@@ -112,33 +122,14 @@
 
     // 打开图库
     function openRp() {
-        $.ajax({
-            url: baseApiUrl + "store/getStoreUrl?key=" + $("#key").val(),
-            type: "GET",
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            },
-            crossDomain: true,
-            processData: false, // 告诉jQuery不要去处理发送的数据
-            contentType: false, // 告诉jQuery不要去设置Content-Type请求头
-            success: function (data) {
-                if (data.code === 200) {
-                    console.log(data);
-                    window.localStorage.setItem("key", $("#key").val());
+        if ($("#key").val()) {
+            window.localStorage.setItem("key", $("#key").val());
+        } else {
+            alert("请输入授权码!");
+            return;
+        }
 
-                    // 导入后图片
-                    let url = data.url;
-                    if (url) {
-                        window.open(url);
-                    }
-                } else {
-                    alert(data.message);
-                }
-            },
-            error: function (data) {
-                alert("System Error!");
-            }
-        });
+        window.open(serverUrl + "/store.html");
     }
 </script>
 

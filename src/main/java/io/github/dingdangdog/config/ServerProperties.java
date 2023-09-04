@@ -13,20 +13,20 @@ public class ServerProperties {
     /**
      * 服务地址
      */
-    public String serverUrl;
+    private String serverUrl;
     /**
      * 服务接口基础前缀
      */
-    public String baseApiUrl;
+    private String baseApiUrl;
     /**
      * 图片地址基础前缀
      */
-    public String baseImageUrl;
+    private String baseImageUrl;
 
     /**
      * 默认水印内容
      */
-    public String waterMark;
+    private String waterMark;
 
     public void setServerUrl(String serverUrl) {
         this.serverUrl = serverUrl;
@@ -42,5 +42,21 @@ public class ServerProperties {
 
     public void setWaterMark(String waterMark) {
         this.waterMark = waterMark;
+    }
+
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public String getBaseApiUrl() {
+        return baseApiUrl;
+    }
+
+    public String getBaseImageUrl() {
+        return baseImageUrl;
+    }
+
+    public String getWaterMark() {
+        return waterMark;
     }
 }

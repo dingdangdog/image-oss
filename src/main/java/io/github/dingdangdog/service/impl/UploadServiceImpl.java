@@ -17,8 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * 上传
@@ -82,7 +80,7 @@ public class UploadServiceImpl implements UploadService {
             }
             fileInfo.setFilePath(imagePath + userProperties.keyMap.get(key) + "/");
             // 组装加水印后图片地址
-            fileUrl.append(serverProperties.baseImageUrl)
+            fileUrl.append(serverProperties.getBaseImageUrl())
                     .append(userProperties.keyMap.get(key))
                     .append("/")
                     .append(fileName)
@@ -103,7 +101,7 @@ public class UploadServiceImpl implements UploadService {
                 }
                 ImageUtils.addWatermark(fileInfo, uploadDTO.getWaterMark());
                 // 组装原图备份地址
-                backupFileUrl.append(serverProperties.baseImageUrl)
+                backupFileUrl.append(serverProperties.getBaseImageUrl())
                         .append(userProperties.keyMap.get(key))
                         .append("/backup/")
                         .append(fileName)

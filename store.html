@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>图库 | 图床工具</title>
+    <link rel="icon" href="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body style="background-color: #c1e6c6;">
+<div class="form-group" style="text-align: center;">
+    <h1 style="display: flex; justify-content: center">
+        <img src="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png" width="40px"/>
+        &nbsp;图库 | 图床工具
+    </h1>
+    <button onclick="exportAll()">导出全部图片</button>
+
+    <div id="image-container" style="width: 80vw; margin: 0 auto;">
+
+    </div>
+    <button id="show-more" onclick="showMore()">显示更多</button>
+
+    <div class="overlay" id="overlay">
+        <img src="" alt="Fullscreen Image" class="fullscreen-image" id="fullscreen-image">
+        <span class="close-button" id="close-button">&times;</span>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    // 获取当前网页的协议（http 或 https）
+    const protocol = window.location.protocol;
+    // 获取当前网页的主机名和端口
+    const host = window.location.host;
+    const serverUrl = protocol + "//" + host;
+    // 服务地址
+    const baseApiUrl = serverUrl + "/api/";
+
+    let images;
+    let showNum = 10;
+    let nextIndex = 0;
+
+    const imgContainer = $("#image-container");
+    let key;
+    window.onload = function () {
+        key = window.localStorage.getItem("key");
+        getImageList(key);
+    }
+
+    const overlay = document.getElementById('overlay');
+    const fullscreenImage = document.getElementById('fullscreen-image');
+    const closeButton = document.getElementById('close-button');
+
+    closeButton.addEventListener('click', () => {
+        overlay.style.display = 'none';
+    });
+
+    overlay.addEventListener('click', (event) => {
+        if (event.target === overlay) {
+            overlay.style.display = 'none';
+        }
+    });
+
+
+    // 导出全部图片
+    function exportAll() {
+        window.open(baseApiUrl + "export?key=" + key);
+    }
+
+    // 打开图库
+    async function getImageList(key) {
+        $.ajax({
+            url: baseApiUrl + "store/getImageList?key=" + key,
+            type: "GET",
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            },
+            crossDomain: true,
+            processData: false, // 告诉jQuery不要去处理发送的数据
+            contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+            success: function (data) {
+                if (data.code === 200) {
+                    images = data.imageList;
+                    showImage(images);
+                } else {
+                    alert(data.message);
+                }
+            },
+            error: function (data) {
+                alert("System Error!");
+            }
+        });
+    }
+
+    function showImage(imageList) {
+        if (imageList.length > 0) {
+            for (let i = nextIndex; i < showNum; i++) {
+                // 创建一个新的 <img> 元素
+                const imageElement = document.createElement('img');
+                imageElement.className = "mini-image";
+                imageElement.src = imageList[i]; // 图片路径
+                imageElement.style.width = "auto"
+                imageElement.style.height = "20vh"
+                imageElement.style.margin = "1vw"
+
+                imgContainer.append(imageElement);
+
+                imageElement.addEventListener('click', () => {
+                    fullscreenImage.src = imageElement.src;
+                    overlay.style.display = 'block';
+                });
+            }
+        }
+        if (showNum >= imageList.length) {
+            $("#show-more").hide();
+        }
+        nextIndex = showNum;
+        showNum += 10;
+        if (showNum >= imageList.length) {
+            showNum = imageList.length;
+        }
+    }
+
+    function showMore() {
+        showImage(images);
+    }
+</script>
+
+<style type="text/css">
+    /* 在这里添加样式来隐藏 overlay 和 fullscreen-image */
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        text-align: center;
+    }
+
+    .fullscreen-image {
+        max-width: 100%;
+        max-height: 100%;
+        margin: auto;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .close-button {
+        color: white;
+        font-size: 30px;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        cursor: pointer;
+    }
+</style>
+</html>

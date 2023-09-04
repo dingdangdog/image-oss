@@ -113,3 +113,6 @@ Nginx在项目中起到很重要的作用，主要有：
 
 ![images-oss](./images-oss.gif)
 
+### 最新功能：增加图库在线查看图片
+
+![images-oss](./images/1693822495308.jpg)

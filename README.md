@@ -11,6 +11,24 @@ image-oss初衷是搭建一个 个人图床服务。演示站：[http://image-os
 
 ### Docker-Compose
 
+- docker-compose.yml示例
+
+```yaml
+version: "3"
+
+services:
+  image-oss:
+    image: dingdangdog/image-oss:latest
+    restart: always
+    environment:
+      TZ: "Asia/Shanghai"
+    volumes:
+      - ${PWD}/images:/data/image-oss/images
+      - ${PWD}/application.yml:/usr/image-oss/jar/application.yml
+    ports:
+      - 11080:80
+```
+
 1. 建议在服务器上创建独立的文件夹，将项目根目录下的`docker-compose.yml`和`application.yml`拷贝到服务器的文件夹下。
 
 2. 修改`application.yml`中的部分配置

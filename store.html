@@ -8,6 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link href="./store.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <link href="./alert-cus.css" rel="stylesheet">
+    <script src="./alert-cus.js"></script>
 </head>
 
 <body style="background-color: #eeeeea;">
@@ -30,6 +32,7 @@
 
     <div id="manager-menu">
         <div class="menu" id="show-big">查看大图</div>
+        <div class="menu" id="copy-url">复制URL</div>
         <div class="menu" id="delete">删除</div>
     </div>
 
@@ -185,6 +188,13 @@
         overlay.style.display = 'block';
     });
 
+    // 复制按钮
+    const copyUrl = document.getElementById('copy-url');
+    copyUrl.addEventListener('click', () => {
+        navigator.clipboard.writeText(window.localStorage.getItem("clickImgSrc"));
+        alertSuccess('复制成功', 2000);
+    });
+
     // 删除按钮
     const deleteMenu = document.getElementById('delete');
     // 删除确认弹窗
@@ -199,7 +209,6 @@
         } else {
             deletePrompt.value = "Sorry, the <dialog> API is not supported by this browser.";
         }
-        // alert('You clicked ：' + imageName);
     });
 
     deletePrompt.addEventListener("close", () => {

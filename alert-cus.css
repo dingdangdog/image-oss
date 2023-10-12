@@ -1,0 +1,27 @@
+#msg-container {
+    position: fixed;
+    top: 5%;
+    left: 46%;
+    text-align: center;
+    display: none;
+}
+
+.success-msg {
+    margin: 5px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: 1px solid #2e7b20;
+    background-color: #80d970;
+    color: #2e7b20;
+    font-size: 16px;
+}
+
+.error-msg {
+    margin: 5px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: 1px solid #e51717;
+    background-color: #ffb9b9;
+    color: #e51717;
+    font-size: 16px;
+}

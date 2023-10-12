@@ -32,6 +32,18 @@
         <div class="menu" id="show-big">查看大图</div>
         <div class="menu" id="delete">删除</div>
     </div>
+
+    <dialog id="delete-prompt">
+        <form method="dialog">
+            <p>
+                <label>确定删除当前选择的图片？删除后无法恢复</label>
+            </p>
+            <div>
+                <button value="cancel">取消</button>
+                <button id="confirmBtn" value="default">确定</button>
+            </div>
+        </form>
+    </dialog>
 </div>
 <script type="text/javascript">
     // 获取当前网页的协议（http 或 https）
@@ -175,9 +187,44 @@
 
     // 删除按钮
     const deleteMenu = document.getElementById('delete');
+    // 删除确认弹窗
+    const deletePrompt = document.getElementById('delete-prompt');
+    // 删除确认按钮
+    const confirmBtn = deletePrompt.querySelector("#confirmBtn");
+    let imageName;
     deleteMenu.addEventListener('click', () => {
-        alert('You clicked ：' + window.localStorage.getItem("clickImgId"));
+        imageName = window.localStorage.getItem("clickImgId");
+        if (typeof deletePrompt.showModal === "function") {
+            deletePrompt.showModal();
+        } else {
+            deletePrompt.value = "Sorry, the <dialog> API is not supported by this browser.";
+        }
+        // alert('You clicked ：' + imageName);
     });
+
+    deletePrompt.addEventListener("close", () => {
+        imageName = "";
+    });
+
+    confirmBtn.addEventListener('click', () => {
+        $.ajax({
+            url: baseApiUrl + "store/deleteImage?key=" + key + "&imageName=" + imageName,
+            type: "POST",
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            },
+            crossDomain: true,
+            processData: false, // 告诉jQuery不要去处理发送的数据
+            contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+            success: function (data) {
+                alert(data.message)
+            },
+            error: function (data) {
+                alert("System Error!");
+            }
+        });
+    });
+
 </script>
 </body>
 </html>

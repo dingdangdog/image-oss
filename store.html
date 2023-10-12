@@ -47,6 +47,8 @@
             </div>
         </form>
     </dialog>
+    <!-- 消息提示容器 -->
+    <div id="msg-container"></div>
 </div>
 <script type="text/javascript">
     // 获取当前网页的协议（http 或 https）
@@ -118,15 +120,16 @@
             contentType: false, // 告诉jQuery不要去设置Content-Type请求头
             success: function (data) {
                 if (data.code === 200) {
+                    alertSuccess("图库连接成功", 2000);
                     // 查询成功，保存图片列表，并初始化显示部分图片
                     images = data.imageList;
                     showImage(images);
                 } else {
-                    alert(data.message);
+                    alertError(data.message, 2000);
                 }
             },
             error: function (data) {
-                alert("System Error!");
+                alertError("System Error!", 2000);
             }
         });
     }
@@ -211,10 +214,12 @@
         }
     });
 
+    // 清空图片名称
     deletePrompt.addEventListener("close", () => {
         imageName = "";
     });
 
+    // 确认删除，调用删除接口
     confirmBtn.addEventListener('click', () => {
         $.ajax({
             url: baseApiUrl + "store/deleteImage?key=" + key + "&imageName=" + imageName,
@@ -226,10 +231,14 @@
             processData: false, // 告诉jQuery不要去处理发送的数据
             contentType: false, // 告诉jQuery不要去设置Content-Type请求头
             success: function (data) {
-                alert(data.message)
+                if (data.code === 200) {
+                    alertSuccess(data.message, 2000);
+                } else {
+                    alertError(data.message, 2000);
+                }
             },
             error: function (data) {
-                alert("System Error!");
+                alertError("System Error!", 2000);
             }
         });
     });

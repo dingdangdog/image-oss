@@ -11,4 +11,6 @@ import java.util.List;
 public interface StoreService {
 
     List<String> getFileList(String key);
+
+    boolean deleteImage(String imageName, String key);
 }

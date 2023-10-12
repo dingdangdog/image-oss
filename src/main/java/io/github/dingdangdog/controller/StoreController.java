@@ -6,10 +6,8 @@ import io.github.dingdangdog.entity.ResultDTO;
 import io.github.dingdangdog.entity.StoreDTO;
 import io.github.dingdangdog.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +61,7 @@ public class StoreController {
         if (userProperties.keyMap.containsKey(key)) {
             List<String> fileList = storeService.getFileList(key);
             List<String> nList = new ArrayList<>();
-            fileList.forEach(name ->{
+            fileList.forEach(name -> {
                 name = serverProperties.getBaseImageUrl() + userProperties.keyMap.get(key) + "/" + name;
                 nList.add(name);
             });
@@ -74,5 +72,31 @@ public class StoreController {
             storeDTO.setMessage("No Permission!");
         }
         return storeDTO;
+    }
+
+
+    /**
+     * 删除图片
+     *
+     * @param imageName 图片名称
+     * @return 删除结果
+     */
+    @PostMapping("/deleteImage")
+    public ResultDTO deleteImage(String imageName, String key) {
+        ResultDTO resultDTO = new ResultDTO();
+        if (StringUtils.hasText(imageName) && userProperties.keyMap.containsKey(key)) {
+            if(storeService.deleteImage(imageName, key)) {
+                resultDTO.setMessage("删除成功");
+                resultDTO.setCode(200);
+            } else {
+                resultDTO.setMessage("删除失败");
+                resultDTO.setCode(500);
+            }
+            return resultDTO;
+        }
+
+        resultDTO.setCode(500);
+        resultDTO.setMessage("删除失败");
+        return resultDTO;
     }
 }

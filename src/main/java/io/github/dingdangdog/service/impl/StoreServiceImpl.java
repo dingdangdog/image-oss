@@ -25,6 +25,7 @@ public class StoreServiceImpl implements StoreService {
     private String imagePath;
     @Autowired
     private UserProperties userProperties;
+
     @Override
     public List<String> getFileList(String key) {
         // Specify the path to the folder you want to read files from
@@ -48,5 +49,15 @@ public class StoreServiceImpl implements StoreService {
             }
         }
         return imageList;
+    }
+
+    @Override
+    public boolean deleteImage(String imageName, String key) {
+        String folderPath = imagePath + userProperties.keyMap.get(key);
+        File file = new File(folderPath + "/" + imageName);
+        if (file.exists()) {
+            return file.delete();
+        }
+        return false;
     }
 }

@@ -19,6 +19,8 @@ function alertCust(msg, className, duration) {
 
     window.setTimeout(function () {
         msgContainer.removeChild(msgDiv);
-        msgContainer.style.display = "none";
+        if (msgContainer.innerHTML == null || msgContainer.innerHTML.length === 0){
+            msgContainer.style.display = "none";
+        }
     }, duration)
 }

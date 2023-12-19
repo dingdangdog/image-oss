@@ -2,9 +2,9 @@
 FROM openjdk:17-jdk-alpine as RUNNER
 
 LABEL author.name="DingDangDog"
-LABEL author.email="dddogx@qq.com"
+LABEL author.email="dddogx@outlook.com"
 LABEL project.name="image-oss"
-LABEL project.version="1.1"
+LABEL project.version="1.4.0"
 
 # 安装 fontconfig 和 ttf-dejavu字体
 RUN apk add fontconfig
@@ -19,13 +19,12 @@ COPY ./nginx/nginx.conf /var/lib/nginx/nginx.conf
 COPY ./nginx/mime.types /var/lib/nginx/mime.types
 
 #RUN mkdir /var/lib/nginx/html
-COPY ./index.html /var/lib/nginx/html/index.html
-COPY ./store.html /var/lib/nginx/html/store.html
+COPY ./web /var/lib/nginx/html
 
 # 后端
 WORKDIR /usr/image-oss/jar
 
-COPY ./target/image-oss-1.3.jar ./image-oss.jar
+COPY ./target/image-oss-1.4.0.jar ./image-oss.jar
 COPY ./src/main/resources/application.yml ./application.yml
 
 # 容器数据卷

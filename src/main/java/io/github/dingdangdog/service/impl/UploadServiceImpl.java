@@ -112,6 +112,7 @@ public class UploadServiceImpl implements UploadService {
                 resultDTO.setBackupUrl(backupUrl);
             }
         } catch (IOException e) {
+            e.printStackTrace();
             resultDTO.setCode(500);
             resultDTO.setMessage("Unknown Exception!");
             return resultDTO;

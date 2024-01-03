@@ -117,6 +117,24 @@ Nginx在项目中起到很重要的作用，主要有：
 
 但大家可以放心，如果你不懂Nginx也可以轻松使用，Nginx相关配置已经集成到Docker容器中，不做任何修改即可直接使用。
 
+## 打包
+
+```shell
+docker build -t dingdangdog/image-oss:1.4.0 .
+```
+
+```shell
+docker build -t dingdangdog/image-oss .
+```
+
+```shell
+docker push dingdangdog/image-oss:1.4.0
+```
+
+```shell
+docker push dingdangdog/image-oss:latest
+```
+
 ## 演示站
 
 演示站一般是最新的版本：[http://image-oss-demo.oldmoon.top/](http://image-oss-demo.oldmoon.top/)

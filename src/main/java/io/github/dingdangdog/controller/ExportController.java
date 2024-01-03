@@ -40,9 +40,9 @@ public class ExportController {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setContentType("application/force-download");
         response.setCharacterEncoding("UTF-8");
-        response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(file.getName(), "UTF-8"));
+        response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(file.getName() + System.currentTimeMillis(), "UTF-8"));
 
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[1024 * 1024];
         try (BufferedInputStream bis = new BufferedInputStream(fileInputStream)) {
             OutputStream os = response.getOutputStream();
             int i = bis.read(buffer);

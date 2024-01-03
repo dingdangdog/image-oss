@@ -147,12 +147,14 @@
             for (let i = nextIndex; i < nextShowNum; i++) {
                 const imageDiv = document.createElement('div')
                 imageDiv.className = 'image-div'
-                // 截取最后一节文件名作为ID
-                let urls = imageList[i].split("/");
-                imageDiv.id = urls[urls.length - 1];
+                // imageDiv.id = urls[urls.length - 1];
+                // imageDiv.src = imageList[i]; // 图片路径
 
                 // 创建一个新的 <img> 元素，并赋予一些属性
                 const imageElement = document.createElement('img');
+                // 截取最后一节文件名作为ID
+                let urls = imageList[i].split("/");
+                imageElement.id = urls[urls.length - 1];
                 imageElement.className = "mini-image";
                 imageElement.src = imageList[i]; // 图片路径
                 // 将新图片（img元素）添加到图片容器
@@ -239,6 +241,8 @@
             success: function (data) {
                 if (data.code === 200) {
                     alertSuccess(data.message, 2000);
+                    // 重新获取图片
+                    findImages()
                 } else {
                     alertError(data.message, 2000);
                 }

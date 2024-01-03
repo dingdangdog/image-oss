@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -56,15 +57,20 @@ public class StoreController {
      * @return 封装结果
      */
     @GetMapping("/getImageList")
-    public ResultDTO getImageList(String key) {
+    public ResultDTO getImageList(String key, String find) {
         StoreDTO storeDTO = new StoreDTO();
         if (userProperties.keyMap.containsKey(key)) {
             List<String> fileList = storeService.getFileList(key);
             List<String> nList = new ArrayList<>();
-            fileList.forEach(name -> {
+            // 倒序排序
+            fileList.sort(Collections.reverseOrder());
+            for (String name : fileList) {
+                if (StringUtils.hasText(find) && !name.contains(find)) {
+                    continue;
+                }
                 name = serverProperties.getBaseImageUrl() + userProperties.keyMap.get(key) + "/" + name;
                 nList.add(name);
-            });
+            }
             storeDTO.setCode(200);
             storeDTO.setImageList(nList);
         } else {
@@ -85,7 +91,7 @@ public class StoreController {
     public ResultDTO deleteImage(String imageName, String key) {
         ResultDTO resultDTO = new ResultDTO();
         if (StringUtils.hasText(imageName) && userProperties.keyMap.containsKey(key)) {
-            if(storeService.deleteImage(imageName, key)) {
+            if (storeService.deleteImage(imageName, key)) {
                 resultDTO.setMessage("删除成功");
                 resultDTO.setCode(200);
             } else {

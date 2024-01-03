@@ -18,6 +18,9 @@
         <img src="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png" width="40px"/>
         &nbsp;图库 | 图床工具
     </h1>
+
+    <label for="find">图片名称：</label><input type="text" name="find" id="find" placeholder="请输入图片名称"/>
+    <button onclick="findImages()">查询</button>
     <button onclick="exportAll()">导出全部图片</button>
 
     <div id="image-container" style="width: 80vw; margin: 0 auto;">
@@ -68,7 +71,7 @@
     let key;
     window.onload = function () {
         key = window.localStorage.getItem("key");
-        getImageList(key);
+        getImageList(key, "");
     }
 
     // 小图图片容器
@@ -108,9 +111,9 @@
     }
 
     // 打开图库
-    async function getImageList(key) {
+    async function getImageList(key, find) {
         $.ajax({
-            url: baseApiUrl + "store/getImageList?key=" + key,
+            url: baseApiUrl + "store/getImageList?key=" + key + "&find=" + find,
             type: "GET",
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -136,27 +139,33 @@
 
     function showImage(imageList) {
         if (imageList.length > 0) {
+            if (nextShowNum > imageList.length) {
+                nextShowNum = imageList.length
+                // 如果所有图片加载完毕，隐藏【显示更多】按钮
+                document.getElementById("show-more").style.display = "none";
+            }
             for (let i = nextIndex; i < nextShowNum; i++) {
+                const imageDiv = document.createElement('div')
+                imageDiv.className = 'image-div'
+                // 截取最后一节文件名作为ID
+                let urls = imageList[i].split("/");
+                imageDiv.id = urls[urls.length - 1];
+
                 // 创建一个新的 <img> 元素，并赋予一些属性
                 const imageElement = document.createElement('img');
                 imageElement.className = "mini-image";
                 imageElement.src = imageList[i]; // 图片路径
-                imageElement.style.width = "auto";
-                imageElement.style.height = "20vh";
-                imageElement.style.margin = "1vw";
-                // 截取最后一节文件名作为ID
-                let urls = imageList[i].split("/");
-                imageElement.id = urls[urls.length - 1];
                 // 将新图片（img元素）添加到图片容器
-                imgContainer.append(imageElement);
+                imageDiv.append(imageElement)
+                imgContainer.append(imageDiv);
 
                 // 图片添加左键点击事件，显示大图
-                imageElement.addEventListener('click', (e) => {
+                imageDiv.addEventListener('click', (e) => {
                     fullscreenImage.src = e.target.src;
                     overlay.style.display = 'block';
                 });
                 // 图片添加右键点击事件，显示管理菜单
-                imageElement.addEventListener('contextmenu', (e) => {
+                imageDiv.addEventListener('contextmenu', (e) => {
                     // 阻止右键默认行为，并显示自定义菜单
                     e.preventDefault();
                     menus.style.display = "block";
@@ -168,16 +177,13 @@
                 });
             }
         }
-        // 如果所有图片加载完毕，隐藏【显示更多】按钮
-        if (nextShowNum >= imageList.length) {
-            document.getElementById("show-more").hide();
-        }
+        console.log(nextShowNum)
         // 变更当前标识，为下一次显示做准备
         nextIndex = nextShowNum;
         nextShowNum += 10;
-        if (nextShowNum >= imageList.length) {
-            nextShowNum = imageList.length;
-        }
+        // if (nextShowNum >= imageList.length) {
+        //     nextShowNum = imageList.length;
+        // }
     }
 
     function showMore() {
@@ -243,6 +249,14 @@
         });
     });
 
+    function findImages() {
+        // 清空图片
+        imgContainer.html("")
+        // 重置条件
+        nextShowNum = 10;
+        nextIndex = 0;
+        getImageList(key, $("#find").val())
+    }
 </script>
 </body>
 </html>

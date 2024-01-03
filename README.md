@@ -10,7 +10,7 @@ And now, it provides a simple visual operation page.
 
 ## Necessary
 
-If want to deploy `dingdangdog/image-oss`, You need An `application.yml` config file. You can find it content from `https://github.com/dingdangdog/image-oss/blob/main/src/main/resources/application.yml`.
+If want to deploy `dingdangdog/image-oss`, You need An `application.yml` config file. You can find it content from [application.yml](https://github.com/dingdangdog/image-oss/blob/main/src/main/resources/application.yml).
 
 You need create `application.yml` config file, the storage path must correspond to the configuration in `docker-compose.yml`.
 

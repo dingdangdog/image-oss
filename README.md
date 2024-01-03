@@ -33,6 +33,13 @@ services:
       - 11080:80
 ```
 
+## Plan
+
+- [ ] Google Chrome plug-in
+- [ ] Multi-language support
+- [ ] More...
+
+
 ## Demo
 
 [More Information (Chinese)](./MoreInfo.md)

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <link href="common.css" rel="stylesheet">
     <link href="alert-cus.css" rel="stylesheet">
     <script src="alert-cus.js"></script>
 </head>
@@ -17,34 +18,46 @@
         <img src="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png" width="40px"/>
         &nbsp;图床工具
     </h1>
-    <input type="file" name="file" id="uploadImage" placeholder="请选择图片" onchange="postData()"/>
-    <button onclick="clearSelect()">清除选择</button>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <button onclick="openRp()">打开图库</button>
-    <!--    <button onclick="exportAll()">导出全部图片</button>-->
+
+    <div class="row">
+        <div class="row">
+            <label for="key">授权码：</label>
+            <input type="password" name="key" id="key" placeholder="请输入授权码"/>
+            <img src="./icons/eye.svg" class="icon" id="key-eye" onclick="hiddenKey()"/>
+            <img src="./icons/eye-off.svg" class="icon" id="key-eye-off" onclick="showKey()"/>
+        </div>
+        <div class="row">
+            <label for="watermark">水印设置：</label>
+            <input type="text" name="watermark" id="watermark" placeholder="为空不加水印"/>
+        </div>
+    </div>
 
     <hr/>
-    <label for="key">请输入授权码：</label><input type="text" name="key" id="key" placeholder="未授权无法上传"/>
-    <label for="watermark">请输入水印内容：</label><input type="text" name="watermark" id="watermark"
-                                                         placeholder="为空不加水印"/>
+
+    <div class="row">
+        <input type="file" name="file" id="uploadImage" placeholder="请选择图片" onchange="postData()"/>
+        <button onclick="clearSelect()">清除选择</button>
+        <button onclick="openRp()">打开图库</button>
+    </div>
 
     <hr/>
     <label for="imageUrl"><h4>结果图</h4></label>
-    <textarea id="imageUrl" placeholder="如果加水印，将在此显示带水印图URL地址，如果不加水印，将在此显示原图URL地址"
-              style="width: 60%;" disabled></textarea>
+    <textarea id="imageUrl"
+              placeholder="如果加水印，将在此显示带水印图URL地址，如果不加水印，将在此显示原图URL地址"
+              style="width: 80%; resize:none;" disabled></textarea>
 
     <br/>
-    <img src="" alt="水印图，图片上传后在此显示" width="auto" style="max-width: 60%" id="img"/>
+    <img src="" alt="水印图，图片上传后在此显示" width="auto" style="max-width: 80%; display: none; margin: 0 auto;" id="img"/>
 
     <hr/>
     <label for="backupUrl"><h4>原图</h4></label>
-    <textarea id="backupUrl" placeholder="如果加水印，将在此显示原图URL地址，如果不加水印，此处不显示" style="width: 60%;"
+    <textarea id="backupUrl" placeholder="如果加水印，将在此显示原图URL地址，如果不加水印，此处不显示"
+              style="width: 80%; resize:none;"
               disabled></textarea>
 
     <br/>
-    <img src="" alt="原图，图片上传后在此显示" width="auto" style="max-width: 60%" id="backupImg"/>
+    <img src="" alt="原图，图片上传后在此显示" width="auto" style="max-width: 80%; display: none; margin: 0 auto;" id="backupImg"/>
 </div>
-
 <!-- 消息提示容器 -->
 <div id="msg-container"></div>
 </body>
@@ -56,6 +69,8 @@
     const serverUrl = protocol + "//" + host;
     // 服务地址
     const baseApiUrl = serverUrl + "/api/";
+    // 本地API测试配置
+    // const baseApiUrl = "http://localhost:11033/";
 
     window.onload = function () {
         $("#key").val(window.localStorage.getItem("key"));
@@ -98,14 +113,17 @@
                     let url = data.url;
                     document.getElementById("imageUrl").value = url;
                     $("#img").attr("src", url);
+                    $("#img")[0].style.display = "block";
                     // 原图备份
                     let backupUrl = data.backupUrl;
                     if (backupUrl) {
                         document.getElementById("backupUrl").value = backupUrl;
                         $("#backupImg").attr("src", backupUrl);
+                        $("#backupImg")[0].style.display = "block";
                     } else {
                         document.getElementById("backupUrl").value = null;
                         $("#backupImg").attr("src", null);
+                        $("#backupImg").style.display = "none";
                     }
                 } else {
                     alertError(data.message, 2000);
@@ -136,6 +154,18 @@
         }
 
         window.open(serverUrl + "/store.html");
+    }
+
+    function hiddenKey() {
+        $("#key-eye")[0].style.display = "none";
+        $("#key-eye-off")[0].style.display = "block";
+        $("#key")[0].type = "password"
+    }
+
+    function showKey() {
+        $("#key-eye")[0].style.display = "block";
+        $("#key-eye-off")[0].style.display = "none";
+        $("#key")[0].type = "text"
     }
 </script>
 

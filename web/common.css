@@ -1,0 +1,33 @@
+body{
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.form-group{
+    margin: 3rem 5rem;
+    max-width: 1280px;
+    width: auto;
+}
+
+.row{
+    display: inline flex;
+    justify-content: space-between;
+    margin: auto 0.5rem;
+}
+
+.icon {
+    height: 15px;
+    margin: auto 0.5rem;
+}
+#key-eye {
+    display: none;
+    cursor: pointer;
+}
+#key-eye-off {
+    display: block;
+    cursor: pointer;
+}

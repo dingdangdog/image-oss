@@ -40,8 +40,8 @@
 .image-div {
     cursor: pointer;
     box-shadow: 10px 10px 10px rgba(0,0,0,.5);
-    width: 16rem;
-    height: 12rem;
+    width: 10rem;
+    height: 8rem;
     margin: 1vw;
     overflow: hidden;
     border: 1px solid #ccc;

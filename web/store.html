@@ -8,6 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link href="store.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <link href="common.css" rel="stylesheet">
     <link href="alert-cus.css" rel="stylesheet">
     <script src="alert-cus.js"></script>
 </head>
@@ -23,10 +24,11 @@
     <button onclick="findImages()">查询</button>
     <button onclick="exportAll()">导出全部图片</button>
 
-    <div id="image-container" style="width: 80vw; margin: 0 auto;">
+    <div id="image-container" style="width: 100%; margin: 0 auto;">
 
     </div>
     <button id="show-more" onclick="showMore()">显示更多</button>
+    <button id="show-all" onclick="showAll()">显示全部</button>
 
     <div class="overlay" id="overlay">
         <img src="" alt="Fullscreen Image" class="fullscreen-image" id="fullscreen-image">
@@ -142,7 +144,8 @@
             if (nextShowNum > imageList.length) {
                 nextShowNum = imageList.length
                 // 如果所有图片加载完毕，隐藏【显示更多】按钮
-                document.getElementById("show-more").style.display = "none";
+                // document.getElementById("show-more").style.display = "none";
+                // document.getElementById("show-all").style.display = "none";
             }
             for (let i = nextIndex; i < nextShowNum; i++) {
                 const imageDiv = document.createElement('div')
@@ -179,17 +182,23 @@
                 });
             }
         }
+
+        if (nextShowNum >= imageList.length) {
+            document.getElementById("show-more").style.display = "none";
+            document.getElementById("show-all").style.display = "none";
+        }
         console.log(nextShowNum)
         // 变更当前标识，为下一次显示做准备
         nextIndex = nextShowNum;
         nextShowNum += 10;
-        // if (nextShowNum >= imageList.length) {
-        //     nextShowNum = imageList.length;
-        // }
     }
 
     function showMore() {
         showImage(images);
+    }
+    function showAll(){
+        nextShowNum = images.length
+        showMore(images);
     }
 
     // 大图按钮

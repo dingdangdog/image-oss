@@ -39,6 +39,7 @@ services:
 - [ ] Multi-language support
 - [ ] More...
 
+> waiting forever···
 
 ## Demo
 
@@ -52,7 +53,10 @@ services:
 
 ### Gallery function
 
-![1697038265012.jpg](./images/1697038265012.jpg)
+- 主界面
+![home](./images/home.jpg)
+- 图库
+![store](./images/store.jpg)
 
 ## Apology
 

@@ -4,7 +4,7 @@ FROM openjdk:17-jdk-alpine as RUNNER
 LABEL author.name="DingDangDog"
 LABEL author.email="dingdangdogx@outlook.com"
 LABEL project.name="image-oss"
-LABEL project.version="1.4.1"
+LABEL project.version="1.4.2"
 
 # 安装 fontconfig 和 ttf-dejavu字体
 RUN apk add fontconfig

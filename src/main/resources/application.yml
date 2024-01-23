@@ -23,7 +23,7 @@ info:
 # 图片存储配置
 image:
 #  path: /data/image-oss/images/
-  path: E:/images/
+  path: E:/docker/image-oss/images/
 
 # 个人认证码（授权码）配置
 user:

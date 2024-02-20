@@ -58,8 +58,6 @@ services:
 - 图库
 ![store](./images/store.jpg)
 
-## Apology
-
-Due to my limited ability, this warehouse cannot satisfy everyone. I apologize again.
+## Notice
 
 **I will try my best to do it well.**

@@ -41,7 +41,7 @@ services:
 
 > waiting forever···
 
-## Demo
+## Get Started
 
 [More Information (Chinese)](./MoreInfo.md)
 

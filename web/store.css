@@ -35,6 +35,12 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    height: 80vh;
+    overflow-y: auto;
+    margin: 0.5rem;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .image-div {
@@ -55,7 +61,7 @@
 #manager-menu {
     display: none;
     position: absolute;
-    background-color: #393737;
+    background-color: rgba(208, 78, 137, 0.8);
     border: 1px solid #ccc;
     padding: 5px;
     border-radius: 5px;
@@ -72,5 +78,5 @@
 }
 
 .menu:hover {
-    background: #939393;
+    background: rgba(208, 78, 137, 0.5);
 }

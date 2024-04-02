@@ -1,10 +1,10 @@
 function alertSuccess(msg, duration) {
-    alertCust(msg, "success-msg", duration);
+    alertCust(msg, "msg success-msg", duration);
 }
 
 
 function alertError(msg, duration) {
-    alertCust(msg, "error-msg", duration);
+    alertCust(msg, "msg error-msg", duration);
 }
 
 function alertCust(msg, className, duration) {

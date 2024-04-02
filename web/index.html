@@ -19,17 +19,18 @@
         &nbsp;图床工具
     </h1>
 
-    <div class="row">
+    <div class="setting-row">
         <div class="row">
-            <label for="key">授权码：</label>
+<!--            <label for="key">授权码：</label>-->
             <input type="password" name="key" id="key" placeholder="请输入授权码"/>
             <img src="./icons/eye.svg" class="icon" id="key-eye" onclick="hiddenKey()"/>
             <img src="./icons/eye-off.svg" class="icon" id="key-eye-off" onclick="showKey()"/>
         </div>
         <div class="row">
-            <label for="watermark">水印设置：</label>
-            <input type="text" name="watermark" id="watermark" placeholder="为空不加水印"/>
+<!--            <label for="watermark">水印设置：</label>-->
+            <input type="text" name="watermark" id="watermark" placeholder="请输入水印，为空不加水印"/>
         </div>
+        <button onclick="openRp()">打开图库</button>
     </div>
 
     <hr/>
@@ -37,7 +38,6 @@
     <div class="row">
         <input type="file" name="file" id="uploadImage" placeholder="请选择图片" onchange="postData()"/>
         <button onclick="clearSelect()">清除选择</button>
-        <button onclick="openRp()">打开图库</button>
     </div>
 
     <hr/>

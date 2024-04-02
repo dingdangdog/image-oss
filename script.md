@@ -1,3 +1,3 @@
 ```shell
-docker build -t dingdangdog/image-oss:1.4.2 .
+docker build -t dingdangdog/image-oss:1.4.3 .
 ```

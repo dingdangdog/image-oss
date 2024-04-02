@@ -1,4 +1,4 @@
-body{
+body {
     display: flex;
     justify-content: center;
     width: 100vw;
@@ -7,14 +7,25 @@ body{
     margin: 0;
 }
 
-.form-group{
-    margin: 3rem 5rem;
+.form-group {
     max-width: 1280px;
     width: auto;
 }
+/* 响应式布局 */
+@media screen and (max-width: 768px) {
+    .setting-row {
+        display: flex;
+        flex-direction: column;
+    }
 
-.row{
+    input, textarea {
+        width: 90%;
+    }
+}
+
+.setting-row,.row {
     display: inline flex;
+    flex: 1;
     justify-content: space-between;
     margin: auto 0.5rem;
 }
@@ -23,11 +34,86 @@ body{
     height: 15px;
     margin: auto 0.5rem;
 }
+
 #key-eye {
     display: none;
     cursor: pointer;
 }
+
 #key-eye-off {
     display: block;
     cursor: pointer;
+}
+
+
+/* Webkit浏览器样式 */
+::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #f6467c;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #ecf0f1;
+    border-radius: 10px;
+}
+
+/* 默认按钮样式 */
+button {
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    background-color: #f6467c;
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(156, 66, 117, 0.3);
+}
+#file-upload-button {
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    background-color: #f6467c;
+    color: #fff;
+}
+
+/* 悬停状态 */
+#file-upload-button:hover, button:hover {
+    background-color: #ea7492;
+}
+
+/* 激活状态 */
+button:active {
+    background-color: #f62e65;
+    box-shadow: 0 1px 3px rgba(156, 66, 117, 0.3);
+}
+
+/* 默认 label 样式 */
+label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* 默认 input 样式 */
+input, textarea {
+    padding: 0.5rem;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+/* 输入框悬停状态 */
+input:hover,
+input:focus {
+    border-color: #f6467c;
 }

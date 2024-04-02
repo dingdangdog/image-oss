@@ -19,22 +19,26 @@
         <img src="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png" width="40px"/>
         &nbsp;图库 | 图床工具
     </h1>
-
-    <label for="find">图片名称：</label><input type="text" name="find" id="find" placeholder="请输入图片名称"/>
-    <button onclick="findImages()">查询</button>
-    <button onclick="exportAll()">导出全部图片</button>
-
-    <div id="image-container" style="width: 100%; margin: 0 auto;">
-
+    <div class="setting-row">
+        <!--    <label for="find">图片名称：</label>-->
+        <input type="text" name="find" id="find" placeholder="请输入图片名称"/>
+        <button onclick="findImages()">查询</button>
+        <button onclick="exportAll()">导出全部图片</button>
     </div>
+    <!--  图片列表容器  -->
+    <div id="image-container">
+    </div>
+
     <button id="show-more" onclick="showMore()">显示更多</button>
     <button id="show-all" onclick="showAll()">显示全部</button>
 
+    <!-- 图片蒙版 -->
     <div class="overlay" id="overlay">
         <img src="" alt="Fullscreen Image" class="fullscreen-image" id="fullscreen-image">
         <span class="close-button" id="close-button">&times;</span>
     </div>
 
+    <!-- 图片右键菜单 -->
     <div id="manager-menu">
         <div class="menu" id="show-big">查看大图</div>
         <div class="menu" id="copy-url">复制URL</div>
@@ -66,7 +70,7 @@
     // 图片地址集合
     let images;
     // 控制当前显示的图片数量
-    let nextShowNum = 10;
+    let nextShowNum = 30;
     // 下一次加载图片的索引
     let nextIndex = 0;
     // 密钥

@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-    <link href="common.css" rel="stylesheet">
-    <link href="alert-cus.css" rel="stylesheet">
-    <script src="alert-cus.js"></script>
+    <link href="css/common.css" rel="stylesheet">
+    <link href="css/alert-cus.css" rel="stylesheet">
+    <script src="js/alert-cus.js"></script>
 </head>
 
 <body style="background-color: #eeeeea;">
@@ -25,12 +25,18 @@
             <input type="password" name="key" id="key" placeholder="请输入授权码"/>
             <img src="./icons/eye.svg" class="icon" id="key-eye" onclick="hiddenKey()"/>
             <img src="./icons/eye-off.svg" class="icon" id="key-eye-off" onclick="showKey()"/>
+            <button onclick="openRp()">打开图库</button>
         </div>
+    </div>
+    <div class="setting-row">
         <div class="row">
-<!--            <label for="watermark">水印设置：</label>-->
+            <!--            <label for="watermark">水印设置：</label>-->
             <input type="text" name="watermark" id="watermark" placeholder="请输入水印，为空不加水印"/>
+            <input type="radio" id="open-watermark" name="watermark2" value="1" style="margin: 0 0.5rem 0 1rem" onclick="checkWater(1)"/>
+            <label for="open-watermark" style="display: flex;align-items: center">开启</label>
+            <input type="radio" id="close-watermark" name="watermark2" value="2" style="margin: 0 0.5rem 0 1rem" checked onclick="checkWater(2)"/>
+            <label for="close-watermark" style="display: flex;align-items: center">关闭</label>
         </div>
-        <button onclick="openRp()">打开图库</button>
     </div>
 
     <hr/>
@@ -69,6 +75,7 @@
     const serverUrl = protocol + "//" + host;
     // 服务地址
     const baseApiUrl = serverUrl + "/api/";
+    let watermark2 = 2;
     // 本地API测试配置
     // const baseApiUrl = "http://localhost:11033/";
 
@@ -91,7 +98,9 @@
         var formData = new FormData();
         formData.append("key", $("#key").val());
         formData.append("file", $("#uploadImage")[0].files[0]);
-        formData.append("waterMark", $("#watermark").val());
+        if (watermark2 === 1) {
+            formData.append("waterMark", $("#watermark").val());
+        }
         $.ajax({
             url: baseApiUrl + "upload",
             type: "POST",
@@ -166,6 +175,10 @@
         $("#key-eye")[0].style.display = "block";
         $("#key-eye-off")[0].style.display = "none";
         $("#key")[0].type = "text"
+    }
+
+    function checkWater(value) {
+        watermark2 = value;
     }
 </script>
 

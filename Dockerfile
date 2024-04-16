@@ -4,7 +4,7 @@ FROM openjdk:17-jdk-alpine as RUNNER
 LABEL author.name="DingDangDog"
 LABEL author.email="dingdangdogx@outlook.com"
 LABEL project.name="image-oss"
-LABEL project.version="1.4.2"
+LABEL project.version="1.4.4"
 
 # 安装 fontconfig 和 ttf-dejavu字体
 RUN apk add fontconfig
@@ -15,8 +15,8 @@ RUN fc-cache --force
 RUN mkdir /run/nginx
 RUN apk add --no-cache nginx
 
-COPY ./nginx/nginx.conf /var/lib/nginx/nginx.conf
-COPY ./nginx/mime.types /var/lib/nginx/mime.types
+COPY docker/nginx/nginx.conf /var/lib/nginx/nginx.conf
+COPY docker/nginx/mime.types /var/lib/nginx/mime.types
 
 #RUN mkdir /var/lib/nginx/html
 COPY ./web /var/lib/nginx/html
@@ -33,7 +33,7 @@ VOLUME /usr/image-oss/jar/application.yml
 
 ENV TZ "Asia/Shanghai"
 
-COPY ./entrypoint.sh ../
+COPY docker/entrypoint.sh ../
 
 EXPOSE 80
 ENTRYPOINT [ "sh","../entrypoint.sh" ]

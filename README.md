@@ -45,12 +45,6 @@ services:
 
 [More Information (Chinese)](./MoreInfo.md)
 
-### Main function
-
-> PS: The sample page may differ from the latest version, but will function roughly the same.
-
-![images-oss](./images-oss.gif)
-
 ### Gallery function
 
 - 主界面

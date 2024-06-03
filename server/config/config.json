@@ -1,0 +1,12 @@
+{
+  "port": "11030",
+  "server_url": "http://localhost:80",
+  "base_image_url": "http://localhost:80/images/",
+  "image_path": "E:/docker/image-oss/images/",
+  "mark": "YourWatermark",
+  "user_map": {
+    "testKey": "test"
+  },
+  "allow_type": ["bmp","jpg","jpeg","png","tif","gif","pcx","tga","exif","fpx","svg","psd","cdr","pcd","dxf","ufo","eps","ai","raw","WMF","webp","avif","apng"],
+  "allow_mark_type": ["jpeg", "jpg", "png"]
+}

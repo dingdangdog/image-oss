@@ -7,7 +7,6 @@ type Config struct {
 	ServerUrl     string            `json:"server_url"`
 	BaseImageUrl  string            `json:"base_image_url"`
 	ImagePath     string            `json:"image_path"`
-	WaterMark     string            `json:"mark"`
 	UserMap       map[string]string `json:"user_map"`
 	AllowType     []string          `json:"allow_type"`
 	AllowMarkType []string          `json:"allow_mark_type"`

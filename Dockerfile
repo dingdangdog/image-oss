@@ -1,39 +1,40 @@
-# 运行容器
-FROM openjdk:17-jdk-alpine as RUNNER
+FROM golang:alpine AS binarybuilder
 
 LABEL author.name="DingDangDog"
 LABEL author.email="dingdangdogx@outlook.com"
 LABEL project.name="image-oss"
-LABEL project.version="1.4.4"
+LABEL project.version="2.0.0"
 
-# 安装 fontconfig 和 ttf-dejavu字体
-RUN apk add fontconfig
-RUN apk add --update ttf-dejavu
-RUN fc-cache --force
-
-# 前端
-RUN mkdir /run/nginx
-RUN apk add --no-cache nginx
-
-COPY docker/nginx/nginx.conf /var/lib/nginx/nginx.conf
-COPY docker/nginx/mime.types /var/lib/nginx/mime.types
-
-#RUN mkdir /var/lib/nginx/html
-COPY ./web /var/lib/nginx/html
+WORKDIR /app
 
 # 后端
-WORKDIR /usr/image-oss/jar
+COPY ./server ./
+# 构建适用于linux的可执行程序
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o images-server .
 
-COPY ./target/image-oss-1.4.1.jar ./image-oss.jar
-COPY ./src/main/resources/application.yml ./application.yml
+# 构建最终镜像
+FROM alpine:latest
 
-# 容器数据卷
-VOLUME /data/image-oss/images/
-VOLUME /usr/image-oss/jar/application.yml
+RUN apk add --no-cache nginx
+
+WORKDIR /app
+
+COPY --from=binarybuilder /app/images-server .
+COPY --from=binarybuilder /app/config/ ./config/
+COPY --from=binarybuilder /app/font/ ./font/
+COPY ./web/ ./web/
+COPY ./docker/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./docker/nginx/mime.types /etc/nginx/mime.types
+
+# 前端
+RUN nginx -t
 
 ENV TZ "Asia/Shanghai"
 
-COPY docker/entrypoint.sh ../
+# 容器数据卷
+VOLUME /app/images/
+VOLUME /app/config/config.json
 
+# 运行应用
 EXPOSE 80
-ENTRYPOINT [ "sh","../entrypoint.sh" ]
+CMD  ["sh", "-c", "nginx && ./images-server"]

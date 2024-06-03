@@ -160,25 +160,21 @@ func getFileList(key string) []string {
 }
 
 func DeleteImageHandler(c *gin.Context) {
-	imageName := c.PostForm("imageName")
-	key := c.PostForm("key")
-	resultDTO := Result{}
+	imageName := c.Query("imageName")
+	key := c.Query("key")
+	resultDTO := Result{Code: 500, Message: "删除失败"}
 
 	if imageName != "" && config.UserMap[key] != "" {
-
-		folderPath := filepath.Join(config.ImagePath, config.UserMap[key])
-		filePath := filepath.Join(folderPath, imageName)
+		filePath := filepath.Join(config.ImagePath, config.UserMap[key], imageName)
 		err := os.Remove(filePath)
 		if err == nil {
 			resultDTO.Code = 200
 			resultDTO.Message = "删除成功"
+			c.JSON(http.StatusOK, resultDTO)
+			return
 		} else {
-			resultDTO.Code = 500
-			resultDTO.Message = "删除失败"
+			resultDTO.Message += err.Error()
 		}
-	} else {
-		resultDTO.Code = 500
-		resultDTO.Message = "删除失败"
 	}
 
 	c.JSON(http.StatusOK, resultDTO)

@@ -14,8 +14,6 @@ import (
 	"path/filepath"
 
 	"github.com/golang/freetype"
-	"github.com/golang/freetype/truetype"
-	"golang.org/x/image/font"
 )
 
 func addWatermark(fileInfo FileInfo, waterMark string) error {
@@ -38,12 +36,35 @@ func addWatermark(fileInfo FileInfo, waterMark string) error {
 	imgBounds := img.Bounds()
 	imgWidth := imgBounds.Dx()
 	imgHeight := imgBounds.Dy()
+	fontSize := imgWidth / 40.0
+	if fontSize < 20 {
+		fontSize = 20
+	}
 
 	// 创建带水印的新图像
 	rgba := image.NewRGBA(image.Rect(0, 0, imgWidth, imgHeight))
 	draw.Draw(rgba, rgba.Bounds(), img, image.Point{}, draw.Src)
 
-	err = addLabel(rgba, waterMark)
+	fontBytes, err := os.ReadFile("./font/SmileySans-Oblique.ttf")
+	if err != nil {
+		return fmt.Errorf("failed to read font file: %w", err)
+	}
+
+	f, err := freetype.ParseFont(fontBytes)
+	if err != nil {
+		return fmt.Errorf("failed to parse font: %w", err)
+	}
+
+	c := freetype.NewContext()
+	c.SetDPI(72)
+	c.SetFont(f)
+	c.SetFontSize(float64(fontSize))
+	c.SetClip(rgba.Bounds())
+	c.SetDst(rgba)
+	c.SetSrc(image.NewUniform(color.RGBA{R: 160, G: 160, B: 160, A: 250}))
+
+	pt := freetype.Pt((imgWidth-len(waterMark)*8)/2, imgHeight/2)
+	_, err = c.DrawString(waterMark, pt)
 	if err != nil {
 		return fmt.Errorf("failed to add label: %w", err)
 	}
@@ -68,42 +89,6 @@ func addWatermark(fileInfo FileInfo, waterMark string) error {
 	}
 
 	return nil
-}
-
-func addLabel(img *image.RGBA, label string) error {
-	fontBytes, err := os.ReadFile("./font/SmileySans-Oblique.ttf")
-	if err != nil {
-		return fmt.Errorf("failed to read font file: %w", err)
-	}
-
-	f, err := freetype.ParseFont(fontBytes)
-	if err != nil {
-		return fmt.Errorf("failed to parse font: %w", err)
-	}
-
-	c := freetype.NewContext()
-	c.SetDPI(72)
-	c.SetFont(f)
-	c.SetFontSize(20)
-	c.SetClip(img.Bounds())
-	c.SetDst(img)
-	c.SetSrc(image.NewUniform(color.RGBA{212, 206, 206, 164}))
-
-	pt := freetype.Pt((img.Bounds().Dx()-getTextWidth(label, c, f))/2, img.Bounds().Dy()/2)
-	_, err = c.DrawString(label, pt)
-	if err != nil {
-		return fmt.Errorf("failed to draw string: %w", err)
-	}
-
-	return nil
-}
-
-func getTextWidth(text string, c *freetype.Context, f *truetype.Font) int {
-	fontSize := c.PointToFixed(20)
-	face := truetype.NewFace(f, &truetype.Options{Size: float64(fontSize)})
-	defer face.Close()
-
-	return font.MeasureString(face, text).Round()
 }
 
 func backupFile(fileInfo FileInfo) error {

@@ -1,4 +1,4 @@
-/target/
-/.idea/
-/src/main/resources/application-pro.yml
-/src/test/
+.vscode/
+.idea/
+
+

@@ -3,8 +3,8 @@
   "image_path": "/app/images/",
   "allow_type": ["bmp","jpg","jpeg","png","tif","gif","pcx","tga","exif","fpx","svg","psd","cdr","pcd","dxf","ufo","eps","ai","raw","WMF","webp","avif","apng"],
   "allow_mark_type": ["jpeg", "jpg", "png"],
-  "server_url": "https://images.oldmoon.top",
-  "base_image_url": "https://images.oldmoon.top/images/",
+  "server_url": "http://localhost:80",
+  "base_image_url": "http://localhost:80/images/",
   "user_map": {
     "testKey": "test"
   }

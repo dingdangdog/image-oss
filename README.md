@@ -10,31 +10,33 @@ And now, it provides a simple visual operation page.
 
 ## Necessary
 
-If want to deploy `dingdangdog/image-oss`, You need An `application.yml` config file. You can find it content from [application.yml](https://github.com/dingdangdog/image-oss/blob/main/src/main/resources/application.yml).
+If want to deploy `dingdangdog/image-oss`, You need An `config.json` config file. You can find it content from [config.json](./server/config/config.json).
 
-You need create `application.yml` config file, the storage path must correspond to the configuration in `docker-compose.yml`.
+You need create `config.json` config file, the storage path must correspond to the configuration in `docker-compose.yml`.
 
-If you use this example `docker-compose.yml`, you should should make sure `docker-compose.yml` and `application.yml` stay together in a folder.
+If you use this example `docker-compose.yml`, you should should make sure `docker-compose.yml` and `config.json` stay together in a folder.
 
 ## docker-compose.yml Demo
-```yaml
-version: "3"
 
+```yaml
 services:
   image-oss:
+    container_name: image-oss
     image: dingdangdog/image-oss:latest
     restart: always
     environment:
       TZ: "Asia/Shanghai"
     volumes:
-      - ${PWD}/images:/data/image-oss/images
-      - ${PWD}/application.yml:/usr/image-oss/jar/application.yml
+      - ./images:/app/images
+      - ./config.json:/app/config.json
     ports:
       - 11080:80
 ```
 
 ## Plan
 
+- [ ] Use Vuetify refactor webui
+- [ ] Simplified configuration
 - [ ] Google Chrome plug-in
 - [ ] Multi-language support
 - [ ] More...

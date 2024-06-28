@@ -126,6 +126,13 @@ func backupFile(fileInfo FileInfo) error {
 }
 
 func saveFile(fileInfo FileInfo, file multipart.File) error {
+	_, err := os.Stat(fileInfo.FilePath)
+	if err != nil {
+		err = os.Mkdir(fileInfo.FilePath, os.ModePerm)
+		if err != nil {
+			return fmt.Errorf("File Path Create Error: %w"+fileInfo.FilePath, err)
+		}
+	}
 	outputFile, err := os.Create(filepath.Join(fileInfo.FilePath, fileInfo.FileName))
 	if err != nil {
 		return fmt.Errorf("failed to create output file: %w", err)
@@ -143,6 +150,10 @@ func saveFile(fileInfo FileInfo, file multipart.File) error {
 	}
 
 	return nil
+}
+
+// PathExistsOrCreate 校验文件夹是否存在，不存在则创建
+func PathExistsOrCreate(path string) {
 }
 
 func contains(slice []string, item string) bool {

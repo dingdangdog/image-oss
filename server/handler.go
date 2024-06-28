@@ -66,7 +66,7 @@ func UploadHandler(c *gin.Context) {
 	err = saveFile(fileInfo, file)
 	var resultDTO Result
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, Result{Code: 500, Message: "Failed to save file!"})
+		c.JSON(http.StatusInternalServerError, Result{Code: 500, Message: "Failed to save file!" + err.Error()})
 		return
 	}
 	url := fileUrl.String()

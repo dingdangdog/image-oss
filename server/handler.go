@@ -71,6 +71,18 @@ func UploadHandler(c *gin.Context) {
 	}
 	url := fileUrl.String()
 	fileInfo.FileUrl = url
+	resultDTO.Url = url
+
+	// Generate thumbnail
+	err = generateThumbnail(fileInfo.FilePath, fileInfo.FileName)
+	thumbFileUrl := strings.Replace(url, config.UserMap[key]+"/", config.UserMap[key]+"/thumb/", 1)
+
+	fileInfo.ThumFileUrl = thumbFileUrl
+	resultDTO.ThumFileUrl = thumbFileUrl
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Result{Code: 500, Message: "Failed to generate thumbnail!" + err.Error()})
+		return
+	}
 
 	if uploadDTO.WaterMark != "" {
 		if !contains(config.AllowMarkType, fileType) {
@@ -90,12 +102,11 @@ func UploadHandler(c *gin.Context) {
 		backupFileUrl.WriteString(".")
 		backupFileUrl.WriteString(fileType)
 		backupUrl := backupFileUrl.String()
+
 		fileInfo.BackupFileUrl = backupUrl
 		resultDTO.BackupUrl = backupUrl
 	}
-
 	resultDTO.Code = 200
-	resultDTO.Url = url
 	c.JSON(http.StatusOK, resultDTO)
 }
 
@@ -120,7 +131,7 @@ func GetImageListHandler(c *gin.Context) {
 	storeDTO := StoreDTO{}
 
 	if value, ok := config.UserMap[key]; ok {
-		fileList := getFileList(key)
+		fileList := getFileList(config.UserMap[key] + "/thumb/")
 		sort.Sort(sort.Reverse(sort.StringSlice(fileList)))
 
 		var nList []string
@@ -128,7 +139,7 @@ func GetImageListHandler(c *gin.Context) {
 			if find != "" && !strings.Contains(name, find) {
 				continue
 			}
-			nList = append(nList, config.BaseImageUrl+value+"/"+name)
+			nList = append(nList, config.BaseImageUrl+value+"/thumb/"+name)
 		}
 
 		storeDTO.Code = 200
@@ -141,8 +152,8 @@ func GetImageListHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, storeDTO)
 }
 
-func getFileList(key string) []string {
-	folderPath := filepath.Join(config.ImagePath, config.UserMap[key])
+func getFileList(dir string) []string {
+	folderPath := filepath.Join(config.ImagePath, dir)
 	var imageList []string
 
 	files, err := os.ReadDir(folderPath)
@@ -212,4 +223,42 @@ func ExportHandler(c *gin.Context) {
 	c.Header("Content-Length", strconv.FormatInt(fileInfo.Size(), 10))
 
 	http.ServeContent(c.Writer, c.Request, "", fileInfo.ModTime(), file)
+}
+
+func GenerateThumb(c *gin.Context) {
+	key := c.Query("key")
+	if _, ok := config.UserMap[key]; !ok {
+		c.JSON(http.StatusForbidden, gin.H{"message": "No Permission!"})
+		return
+	}
+
+	fileList := getFileList(config.UserMap[key])
+	thumbList := getFileList(config.UserMap[key] + "/thumb/")
+
+	needList := checkFilesNotInThumbList(fileList, thumbList)
+
+	for _, fileName := range needList {
+		generateThumbnail(filepath.Join(config.ImagePath, config.UserMap[key]), fileName)
+	}
+	resultDTO := Result{Code: 200, Message: strconv.Itoa(len(needList))}
+	c.JSON(http.StatusOK, resultDTO) // needList)
+}
+
+// checkFilesNotInThumbList 检查 fileList 中的文件名是否不存在于 thumbList 中
+func checkFilesNotInThumbList(fileList, thumbList []string) []string {
+	// 创建一个 map 来存储 thumbList 中的文件名
+	thumbMap := make(map[string]bool)
+	for _, thumb := range thumbList {
+		thumbMap[thumb] = true
+	}
+
+	// 检查 fileList 中的文件名是否在 thumbMap 中不存在
+	var result []string
+	for _, file := range fileList {
+		if _, exists := thumbMap[file]; !exists {
+			result = append(result, file)
+		}
+	}
+
+	return result
 }

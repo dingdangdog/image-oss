@@ -13,10 +13,11 @@ type Config struct {
 }
 
 type Result struct {
-	Code      int    `json:"code"`
-	Message   string `json:"message"`
-	Url       string `json:"url"`
-	BackupUrl string `json:"backupUrl"`
+	Code        int    `json:"code"`
+	Message     string `json:"message"`
+	Url         string `json:"url"`
+	BackupUrl   string `json:"backupUrl"`
+	ThumFileUrl string `json:"thumFileUrl"`
 }
 
 type FileInfo struct {
@@ -25,6 +26,7 @@ type FileInfo struct {
 	FileType      string `json:"fileType"`
 	FileUrl       string `json:"fileUrl"`
 	BackupFileUrl string `json:"backupFileUrl"`
+	ThumFileUrl   string `json:"thumFileUrl"`
 }
 
 // UploadDTO represents the data transfer object for uploading an image

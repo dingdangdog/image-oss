@@ -27,6 +27,7 @@ func main() {
 
 	api.POST("/upload", UploadHandler)
 	api.POST("/store/deleteImage", DeleteImageHandler)
+	api.POST("/store/initThumb", GenerateThumb)
 	api.GET("/store/getStoreUrl", GetStoreUrlHandler)
 	api.GET("/store/getImageList", GetImageListHandler)
 	api.GET("/export", ExportHandler)

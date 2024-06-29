@@ -13,6 +13,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/disintegration/imaging"
 	"github.com/golang/freetype"
 )
 
@@ -152,10 +153,6 @@ func saveFile(fileInfo FileInfo, file multipart.File) error {
 	return nil
 }
 
-// PathExistsOrCreate 校验文件夹是否存在，不存在则创建
-func PathExistsOrCreate(path string) {
-}
-
 func contains(slice []string, item string) bool {
 	for _, element := range slice {
 		if element == item {
@@ -234,4 +231,35 @@ func CompressFile(path string) (string, error) {
 	}
 
 	return generatePath, nil
+}
+
+// generateThumbnail generates a thumbnail for the uploaded image
+func generateThumbnail(filePath string, fileName string) error {
+	srcPath := filepath.Join(filePath, fileName)
+	dstPath := filepath.Join(filePath+"/thumb/", fileName)
+
+	_, err := os.Stat(filePath + "/thumb/")
+	if err != nil {
+		err = os.Mkdir(filePath+"/thumb/", os.ModePerm)
+		if err != nil {
+			return fmt.Errorf("File Path Create Error: %w"+filePath, err)
+		}
+	}
+
+	// Open the source image file
+	srcImage, err := imaging.Open(srcPath)
+	if err != nil {
+		return fmt.Errorf("failed to open image: %v", err)
+	}
+
+	// Resize the image to width 100px preserving the aspect ratio
+	thumbnail := imaging.Resize(srcImage, 200, 0, imaging.Lanczos)
+
+	// Save the thumbnail image
+	err = imaging.Save(thumbnail, dstPath)
+	if err != nil {
+		return fmt.Errorf("failed to save thumbnail: %v", err)
+	}
+
+	return nil
 }

@@ -1,73 +1,140 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head>
+  <head>
     <title>图床工具</title>
-    <link rel="icon" href="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link
+      rel="icon"
+      href="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-    <link href="css/common.css" rel="stylesheet">
-    <link href="css/alert-cus.css" rel="stylesheet">
+    <link href="css/store.css" rel="stylesheet" />
+    <link href="css/common.css" rel="stylesheet" />
+    <link href="css/alert-cus.css" rel="stylesheet" />
     <script src="js/alert-cus.js"></script>
-</head>
+  </head>
 
-<body style="background-color: #eeeeea;">
-<div class="form-group" style="text-align: center;">
-    <h1 style="display: flex; justify-content: center">
-        <img src="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png" width="40px"/>
+  <body style="background-color: #eeeeea">
+    <div class="form-group" style="text-align: center">
+      <h1 style="display: flex; justify-content: center">
+        <img
+          src="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png"
+          width="40px"
+        />
         &nbsp;图床工具
-    </h1>
+      </h1>
 
-    <div class="setting-row">
+      <div class="setting-row">
         <div class="row">
-<!--            <label for="key">授权码：</label>-->
-            <input type="password" name="key" id="key" placeholder="请输入授权码"/>
-            <img src="./icons/eye.svg" class="icon" id="key-eye" onclick="hiddenKey()"/>
-            <img src="./icons/eye-off.svg" class="icon" id="key-eye-off" onclick="showKey()"/>
-            <button onclick="openRp()">打开图库</button>
+          <!--            <label for="key">授权码：</label>-->
+          <input
+            type="password"
+            name="key"
+            id="key"
+            placeholder="请输入授权码"
+          />
+          <img
+            src="./icons/eye.svg"
+            class="icon"
+            id="key-eye"
+            onclick="hiddenKey()"
+          />
+          <img
+            src="./icons/eye-off.svg"
+            class="icon"
+            id="key-eye-off"
+            onclick="showKey()"
+          />
+          <button onclick="openRp()">打开图库</button>
         </div>
-    </div>
-    <div class="setting-row">
+      </div>
+      <div class="setting-row">
         <div class="row">
-            <!--            <label for="watermark">水印设置：</label>-->
-            <input type="text" name="watermark" id="watermark" placeholder="请输入水印，为空不加水印"/>
-            <input type="radio" id="open-watermark" name="watermark2" value="1" style="margin: 0 0.5rem 0 1rem" onclick="checkWater(1)"/>
-            <label for="open-watermark" style="display: flex;align-items: center">开启</label>
-            <input type="radio" id="close-watermark" name="watermark2" value="2" style="margin: 0 0.5rem 0 1rem" checked onclick="checkWater(2)"/>
-            <label for="close-watermark" style="display: flex;align-items: center">关闭</label>
+          <!--            <label for="watermark">水印设置：</label>-->
+          <input
+            type="text"
+            name="watermark"
+            id="watermark"
+            placeholder="请输入水印，为空不加水印"
+          />
+          <input
+            type="radio"
+            id="open-watermark"
+            name="watermark2"
+            value="1"
+            style="margin: 0 0.5rem 0 1rem"
+            onclick="checkWater(1)"
+          />
+          <label for="open-watermark" style="display: flex; align-items: center"
+            >开启</label
+          >
+          <input
+            type="radio"
+            id="close-watermark"
+            name="watermark2"
+            value="2"
+            style="margin: 0 0.5rem 0 1rem"
+            checked
+            onclick="checkWater(2)"
+          />
+          <label
+            for="close-watermark"
+            style="display: flex; align-items: center"
+            >关闭</label
+          >
         </div>
-    </div>
+      </div>
 
-    <hr/>
+      <hr />
 
-    <div class="row">
-        <input type="file" name="file" id="uploadImage" placeholder="请选择图片" onchange="postData()"/>
+      <div class="row">
+        <input
+          type="file"
+          name="file"
+          id="uploadImage"
+          placeholder="请选择图片"
+          onchange="postData()"
+        />
         <button onclick="clearSelect()">清除选择</button>
+      </div>
+
+      <hr />
+      <label><h4>结果图</h4></label>
+      <br />
+      <div id="image-div">
+        <img
+          src=""
+          alt="图片上传后在此显示"
+          width="auto"
+          style="max-width: 80%; margin: 0 auto"
+          id="img"
+        />
+      </div>
+
+      <!-- 图片右键菜单 -->
+      <div id="manager-menu">
+        <div class="menu" id="copy-url">复制URL</div>
+        <div class="menu" id="copy-markdown">复制Markdown</div>
+        <div class="menu" id="delete">删除</div>
+      </div>
     </div>
+    <!-- 消息提示容器 -->
+    <div id="msg-container"></div>
 
-    <hr/>
-    <label for="imageUrl"><h4>结果图</h4></label>
-    <textarea id="imageUrl"
-              placeholder="如果加水印，将在此显示带水印图URL地址，如果不加水印，将在此显示原图URL地址"
-              style="width: 80%; resize:none;" disabled></textarea>
-
-    <br/>
-    <img src="" alt="水印图，图片上传后在此显示" width="auto" style="max-width: 80%; display: none; margin: 0 auto;" id="img"/>
-
-    <hr/>
-    <label for="backupUrl"><h4>原图</h4></label>
-    <textarea id="backupUrl" placeholder="如果加水印，将在此显示原图URL地址，如果不加水印，此处不显示"
-              style="width: 80%; resize:none;"
-              disabled></textarea>
-
-    <br/>
-    <img src="" alt="原图，图片上传后在此显示" width="auto" style="max-width: 80%; display: none; margin: 0 auto;" id="backupImg"/>
-</div>
-<!-- 消息提示容器 -->
-<div id="msg-container"></div>
-</body>
-<script type="text/javascript">
+    <dialog id="delete-prompt">
+      <form method="dialog">
+        <p>
+          <label>确定删除当前选择的图片？删除后无法恢复</label>
+        </p>
+        <div>
+          <button value="cancel">取消</button>
+          <button id="confirmBtn" value="default">确定</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+  <script type="text/javascript">
     // 获取当前网页的协议（http 或 https）
     const protocol = window.location.protocol;
     // 获取当前网页的主机名和端口
@@ -78,108 +145,188 @@
     let watermark2 = 2;
     // 本地API测试配置
     // const baseApiUrl = "http://localhost:11033/";
+    let key = "";
+    let waterMark = "";
 
     window.onload = function () {
-        $("#key").val(window.localStorage.getItem("key"));
-        $("#watermark").val(window.localStorage.getItem("waterMark"));
-    }
+      key = window.localStorage.getItem("key");
+      waterMark = window.localStorage.getItem("waterMark");
+      $("#key").val(key);
+      $("#watermark").val(waterMark);
+    };
 
     // 上传图片
     function postData() {
-        if (!$("#uploadImage")[0].files[0]) {
-            return;
-        }
-        if ($("#key").val()) {
-            window.localStorage.setItem("key", $("#key").val());
-        } else {
-            alertError("请输入授权码!", 2000);
-            return;
-        }
-        var formData = new FormData();
-        formData.append("key", $("#key").val());
-        formData.append("file", $("#uploadImage")[0].files[0]);
-        if (watermark2 === 1) {
-            formData.append("waterMark", $("#watermark").val());
-        }
-        $.ajax({
-            url: baseApiUrl + "upload",
-            type: "POST",
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            },
-            crossDomain: true,
-            processData: false, // 告诉jQuery不要去处理发送的数据
-            contentType: false, // 告诉jQuery不要去设置Content-Type请求头
-            data: formData,
-            success: function (data) {
-                if (data.code === 200) {
-                    alertSuccess("上传成功", 2000);
-                    console.log(data);
-                    window.localStorage.setItem("key", $("#key").val());
-                    window.localStorage.setItem("waterMark", $("#watermark").val());
+      if (!$("#uploadImage")[0].files[0]) {
+        return;
+      }
+      if ($("#key").val()) {
+        key = $("#key").val()
+        waterMark = $("#watermark").val()
+      } else {
+        alertError("请输入授权码!", 2000);
+        return;
+      }
+      var formData = new FormData();
+      formData.append("key", key);
+      formData.append("file", $("#uploadImage")[0].files[0]);
+      if (watermark2 === 1) {
+        formData.append("waterMark", $("#watermark").val());
+      }
+      $.ajax({
+        url: baseApiUrl + "upload",
+        type: "POST",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+        crossDomain: true,
+        processData: false, // 告诉jQuery不要去处理发送的数据
+        contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+        data: formData,
+        success: function (data) {
+          if (data.code === 200) {
+            alertSuccess("上传成功", 2000);
+            console.log(data);
+            window.localStorage.setItem("key", key);
+            window.localStorage.setItem("waterMark", waterMark);
 
-                    // 导入后图片
-                    let url = data.url;
-                    document.getElementById("imageUrl").value = url;
-                    $("#img").attr("src", url);
-                    $("#img")[0].style.display = "block";
-                    // 原图备份
-                    let backupUrl = data.backupUrl;
-                    if (backupUrl) {
-                        document.getElementById("backupUrl").value = backupUrl;
-                        $("#backupImg").attr("src", backupUrl);
-                        $("#backupImg")[0].style.display = "block";
-                    } else {
-                        document.getElementById("backupUrl").value = null;
-                        $("#backupImg").attr("src", null);
-                        $("#backupImg").style.display = "none";
-                    }
-                } else {
-                    alertError(data.message, 2000);
-                }
-            },
-            error: function (data) {
-                alertError("System Error!", 2000);
-            }
-        });
+            // 导入后图片
+            let url = data.url;
+            $("#img").attr("src", data.thumFileUrl);
+            $("#img")[0].style.display = "block";
+          } else {
+            alertError(data.message, 2000);
+          }
+        },
+        error: function (data) {
+          alertError("System Error!", 2000);
+        },
+      });
     }
 
     function clearSelect() {
-        $("#uploadImage").val(null);
+      $("#uploadImage").val(null);
     }
 
     // 导出全部图片
     function exportAll() {
-        window.open(baseApiUrl + "export?key=" + $("#key").val());
+      window.open(baseApiUrl + "export?key=" + $("#key").val());
     }
 
     // 打开图库
     function openRp() {
-        if ($("#key").val()) {
-            window.localStorage.setItem("key", $("#key").val());
-        } else {
-            alertError("请输入授权码!", 2000);
-            return;
-        }
+      if ($("#key").val()) {
+        window.localStorage.setItem("key", $("#key").val());
+      } else {
+        alertError("请输入授权码!", 2000);
+        return;
+      }
 
-        window.open(serverUrl + "/store.html");
+      window.open(serverUrl + "/store.html");
     }
 
     function hiddenKey() {
-        $("#key-eye")[0].style.display = "none";
-        $("#key-eye-off")[0].style.display = "block";
-        $("#key")[0].type = "password"
+      $("#key-eye")[0].style.display = "none";
+      $("#key-eye-off")[0].style.display = "block";
+      $("#key")[0].type = "password";
     }
 
     function showKey() {
-        $("#key-eye")[0].style.display = "block";
-        $("#key-eye-off")[0].style.display = "none";
-        $("#key")[0].type = "text"
+      $("#key-eye")[0].style.display = "block";
+      $("#key-eye-off")[0].style.display = "none";
+      $("#key")[0].type = "text";
     }
 
     function checkWater(value) {
-        watermark2 = value;
+      watermark2 = value;
     }
-</script>
 
+    imageDiv = document.getElementById("image-div");
+    // 图片添加右键点击事件，显示管理菜单
+    imageDiv.addEventListener("contextmenu", (e) => {
+      // 阻止右键默认行为，并显示自定义菜单
+      e.preventDefault();
+      menus.style.display = "block";
+      menus.style.left = e.pageX + "px";
+      menus.style.top = e.pageY + "px";
+      // 记录当前点击的数据ID（图片名称）
+      window.localStorage.setItem("clickImgId", e.target.id);
+      window.localStorage.setItem("clickImgSrc", e.target.src);
+    });
+
+    // 右键菜单容器
+    const menus = document.getElementById("manager-menu");
+    // 整个DOM元素，任意地方左键点击，则隐藏右键菜单，并上次右键的文件名
+    document.addEventListener("click", (e) => {
+      menus.style.display = "none";
+      window.localStorage.removeItem("clickImgId");
+      window.localStorage.removeItem("clickImgSrc");
+    });
+
+    // 复制按钮
+    const copyUrl = document.getElementById("copy-url");
+    copyUrl.addEventListener("click", () => {
+      url = window.localStorage.getItem("clickImgSrc");
+      realUrl = url.replace("/thumb/", "/");
+      navigator.clipboard.writeText(realUrl);
+      alertSuccess("复制成功", 2000);
+    });
+
+    // 复制Markdown
+    const copyMarkdown = document.getElementById("copy-markdown");
+    copyMarkdown.addEventListener("click", () => {
+      url = window.localStorage.getItem("clickImgSrc");
+      realUrl = url.replace("/thumb/", "/");
+      navigator.clipboard.writeText(`![image](${realUrl})`);
+      alertSuccess("复制成功", 2000);
+    });
+
+    // 删除按钮
+    const deleteMenu = document.getElementById("delete");
+    // 删除确认弹窗
+    const deletePrompt = document.getElementById("delete-prompt");
+    // 删除确认按钮
+    const confirmBtn = deletePrompt.querySelector("#confirmBtn");
+    let imageName;
+    deleteMenu.addEventListener("click", () => {
+      imageName = window.localStorage.getItem("clickImgId");
+      if (typeof deletePrompt.showModal === "function") {
+        deletePrompt.showModal();
+      } else {
+        deletePrompt.value =
+          "Sorry, the <dialog> API is not supported by this browser.";
+      }
+    });
+
+    // 确认删除，调用删除接口
+    confirmBtn.addEventListener("click", () => {
+      $.ajax({
+        url:
+          baseApiUrl +
+          "store/deleteImage?key=" +
+          key +
+          "&imageName=" +
+          imageName,
+        type: "POST",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+        crossDomain: true,
+        processData: false, // 告诉jQuery不要去处理发送的数据
+        contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+        success: function (data) {
+          if (data.code === 200) {
+            alertSuccess(data.message, 2000);
+            // 重新获取图片
+            findImages();
+          } else {
+            alertError(data.message, 2000);
+          }
+        },
+        error: function (data) {
+          alertError("System Error!", 2000);
+        },
+      });
+    });
+  </script>
 </html>

@@ -1,13 +1,14 @@
-version: "3"
+version: "3.0"
 
 services:
   image-oss:
-    image: dingdangdog/image-oss:latest
+    container_name: image-oss
+    image: dingdangdog/image-oss:2.0.1
     restart: always
     environment:
       TZ: "Asia/Shanghai"
     volumes:
-      - ${PWD}/images:/data/image-oss/images
-      - ${PWD}/application.yml:/usr/image-oss/jar/application.yml
+      - ./images:/app/images
+      - ./config.json:/app/config/config.json
     ports:
       - 11080:80

@@ -1,281 +1,309 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head>
+  <head>
     <title>图库 | 图床工具</title>
-    <link rel="icon" href="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href="css/store.css" rel="stylesheet">
+    <link
+      rel="icon"
+      href="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="css/store.css" rel="stylesheet" />
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-    <link href="css/common.css" rel="stylesheet">
-    <link href="css/alert-cus.css" rel="stylesheet">
+    <link href="css/common.css" rel="stylesheet" />
+    <link href="css/alert-cus.css" rel="stylesheet" />
     <script src="js/alert-cus.js"></script>
-</head>
+  </head>
 
-<body style="background-color: #eeeeea;">
-<div class="form-group" style="text-align: center;">
-    <h1 style="display: flex; justify-content: center">
-        <img src="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png" width="40px"/>
+  <body style="background-color: #eeeeea">
+    <div class="form-group" style="text-align: center">
+      <h1 style="display: flex; justify-content: center">
+        <img
+          src="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png"
+          width="40px"
+        />
         &nbsp;图库 | 图床工具
-    </h1>
-    <div class="setting-row">
+      </h1>
+      <div class="setting-row">
         <!--    <label for="find">图片名称：</label>-->
-        <input type="text" name="find" id="find" placeholder="请输入图片名称"/>
+        <input type="text" name="find" id="find" placeholder="请输入图片名称" />
         <button onclick="findImages()">查询</button>
         <button onclick="exportAll()">导出全部图片</button>
-    </div>
-    <!--  图片列表容器  -->
-    <div id="image-container">
-    </div>
+      </div>
+      <!--  图片列表容器  -->
+      <div id="image-container"></div>
 
-    <button id="show-more" onclick="showMore()">显示更多</button>
-    <button id="show-all" onclick="showAll()">显示全部</button>
+      <button id="show-more" onclick="showMore()">显示更多</button>
+      <button id="show-all" onclick="showAll()">显示全部</button>
 
-    <!-- 图片蒙版 -->
-    <div class="overlay" id="overlay">
-        <img src="" alt="Fullscreen Image" class="fullscreen-image" id="fullscreen-image">
+      <!-- 图片蒙版 -->
+      <div class="overlay" id="overlay">
+        <img
+          src=""
+          alt="Fullscreen Image"
+          class="fullscreen-image"
+          id="fullscreen-image"
+        />
         <span class="close-button" id="close-button">&times;</span>
-    </div>
+      </div>
 
-    <!-- 图片右键菜单 -->
-    <div id="manager-menu">
+      <!-- 图片右键菜单 -->
+      <div id="manager-menu">
         <div class="menu" id="show-big">查看大图</div>
         <div class="menu" id="copy-url">复制URL</div>
+        <div class="menu" id="copy-markdown">复制Markdown</div>
         <div class="menu" id="delete">删除</div>
-    </div>
+      </div>
 
-    <dialog id="delete-prompt">
+      <dialog id="delete-prompt">
         <form method="dialog">
-            <p>
-                <label>确定删除当前选择的图片？删除后无法恢复</label>
-            </p>
-            <div>
-                <button value="cancel">取消</button>
-                <button id="confirmBtn" value="default">确定</button>
-            </div>
+          <p>
+            <label>确定删除当前选择的图片？删除后无法恢复</label>
+          </p>
+          <div>
+            <button value="cancel">取消</button>
+            <button id="confirmBtn" value="default">确定</button>
+          </div>
         </form>
-    </dialog>
-    <!-- 消息提示容器 -->
-    <div id="msg-container"></div>
-</div>
-<script type="text/javascript">
-    // 获取当前网页的协议（http 或 https）
-    const protocol = window.location.protocol;
-    // 获取当前网页的主机名和端口
-    const host = window.location.host;
-    const serverUrl = protocol + "//" + host;
-    // 服务地址
-    const baseApiUrl = serverUrl + "/api/";
-    // 图片地址集合
-    let images;
-    // 控制当前显示的图片数量
-    let nextShowNum = 30;
-    // 下一次加载图片的索引
-    let nextIndex = 0;
-    // 密钥
-    let key;
-    window.onload = function () {
+      </dialog>
+      <!-- 消息提示容器 -->
+      <div id="msg-container"></div>
+    </div>
+    <script type="text/javascript">
+      // 获取当前网页的协议（http 或 https）
+      const protocol = window.location.protocol;
+      // 获取当前网页的主机名和端口
+      const host = window.location.host;
+      const serverUrl = protocol + "//" + host;
+      // 服务地址
+      const baseApiUrl = serverUrl + "/api/";
+      // 图片地址集合
+      let images;
+      // 控制当前显示的图片数量
+      let nextShowNum = 30;
+      // 下一次加载图片的索引
+      let nextIndex = 0;
+      // 密钥
+      let key;
+      window.onload = function () {
         key = window.localStorage.getItem("key");
         getImageList(key, "");
-    }
+      };
 
-    // 小图图片容器
-    const imgContainer = $("#image-container");
+      // 小图图片容器
+      const imgContainer = $("#image-container");
 
-    // 全屏容器
-    const overlay = document.getElementById('overlay');
-    // 全屏后的图片容器
-    const fullscreenImage = document.getElementById('fullscreen-image');
-    // 全屏后的关闭按钮
-    const closeButton = document.getElementById('close-button');
+      // 全屏容器
+      const overlay = document.getElementById("overlay");
+      // 全屏后的图片容器
+      const fullscreenImage = document.getElementById("fullscreen-image");
+      // 全屏后的关闭按钮
+      const closeButton = document.getElementById("close-button");
 
-    // 关闭按钮添加点击事件
-    closeButton.addEventListener('click', () => {
-        overlay.style.display = 'none';
-    });
-    // 全屏容器添加点击事件
-    overlay.addEventListener('click', (event) => {
+      // 关闭按钮添加点击事件
+      closeButton.addEventListener("click", () => {
+        overlay.style.display = "none";
+      });
+      // 全屏容器添加点击事件
+      overlay.addEventListener("click", (event) => {
         if (event.target === overlay) {
-            overlay.style.display = 'none';
+          overlay.style.display = "none";
         }
-    });
+      });
 
-    // 右键菜单容器
-    const menus = document.getElementById('manager-menu');
-    // 整个DOM元素，任意地方左键点击，则隐藏右键菜单，并上次右键的文件名
-    document.addEventListener('click', (e) => {
-        menus.style.display = 'none';
+      // 右键菜单容器
+      const menus = document.getElementById("manager-menu");
+      // 整个DOM元素，任意地方左键点击，则隐藏右键菜单，并上次右键的文件名
+      document.addEventListener("click", (e) => {
+        menus.style.display = "none";
         window.localStorage.removeItem("clickImgId");
         window.localStorage.removeItem("clickImgSrc");
-    });
+      });
 
-
-    // 导出全部图片
-    function exportAll() {
+      // 导出全部图片
+      function exportAll() {
         window.open(baseApiUrl + "export?key=" + key);
-    }
+      }
 
-    // 打开图库
-    async function getImageList(key, find) {
+      // 打开图库
+      async function getImageList(key, find) {
         $.ajax({
-            url: baseApiUrl + "store/getImageList?key=" + key + "&find=" + find,
-            type: "GET",
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            },
-            crossDomain: true,
-            processData: false, // 告诉jQuery不要去处理发送的数据
-            contentType: false, // 告诉jQuery不要去设置Content-Type请求头
-            success: function (data) {
-                if (data.code === 200) {
-                    alertSuccess("图库连接成功", 2000);
-                    // 查询成功，保存图片列表，并初始化显示部分图片
-                    images = data.imageList;
-                    showImage(images);
-                } else {
-                    alertError(data.message, 2000);
-                }
-            },
-            error: function (data) {
-                alertError("System Error!", 2000);
+          url: baseApiUrl + "store/getImageList?key=" + key + "&find=" + find,
+          type: "GET",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+          crossDomain: true,
+          processData: false, // 告诉jQuery不要去处理发送的数据
+          contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+          success: function (data) {
+            if (data.code === 200) {
+              alertSuccess("图库连接成功", 2000);
+              // 查询成功，保存图片列表，并初始化显示部分图片
+              images = data.imageList;
+              showImage(images);
+            } else {
+              alertError(data.message, 2000);
             }
+          },
+          error: function (data) {
+            alertError("System Error!", 2000);
+          },
         });
-    }
+      }
 
-    function showImage(imageList) {
+      function showImage(imageList) {
         if (imageList.length > 0) {
-            if (nextShowNum > imageList.length) {
-                nextShowNum = imageList.length
-                // 如果所有图片加载完毕，隐藏【显示更多】按钮
-                // document.getElementById("show-more").style.display = "none";
-                // document.getElementById("show-all").style.display = "none";
-            }
-            for (let i = nextIndex; i < nextShowNum; i++) {
-                const imageDiv = document.createElement('div')
-                imageDiv.className = 'image-div'
-                // imageDiv.id = urls[urls.length - 1];
-                // imageDiv.src = imageList[i]; // 图片路径
+          if (nextShowNum > imageList.length) {
+            nextShowNum = imageList.length;
+            // 如果所有图片加载完毕，隐藏【显示更多】按钮
+            // document.getElementById("show-more").style.display = "none";
+            // document.getElementById("show-all").style.display = "none";
+          }
+          for (let i = nextIndex; i < nextShowNum; i++) {
+            const imageDiv = document.createElement("div");
+            imageDiv.className = "image-div";
+            // imageDiv.id = urls[urls.length - 1];
+            // imageDiv.src = imageList[i]; // 图片路径
 
-                // 创建一个新的 <img> 元素，并赋予一些属性
-                const imageElement = document.createElement('img');
-                // 截取最后一节文件名作为ID
-                let urls = imageList[i].split("/");
-                imageElement.id = urls[urls.length - 1];
-                imageElement.className = "mini-image";
-                imageElement.src = imageList[i]; // 图片路径
-                // 将新图片（img元素）添加到图片容器
-                imageDiv.append(imageElement)
-                imgContainer.append(imageDiv);
+            // 创建一个新的 <img> 元素，并赋予一些属性
+            const imageElement = document.createElement("img");
+            // 截取最后一节文件名作为ID
+            let urls = imageList[i].split("/");
+            imageElement.id = urls[urls.length - 1];
+            imageElement.className = "mini-image";
+            imageElement.src = imageList[i]; // 图片路径
+            // 将新图片（img元素）添加到图片容器
+            imageDiv.append(imageElement);
+            imgContainer.append(imageDiv);
 
-                // 图片添加左键点击事件，显示大图
-                imageDiv.addEventListener('click', (e) => {
-                    fullscreenImage.src = e.target.src;
-                    overlay.style.display = 'block';
-                });
-                // 图片添加右键点击事件，显示管理菜单
-                imageDiv.addEventListener('contextmenu', (e) => {
-                    // 阻止右键默认行为，并显示自定义菜单
-                    e.preventDefault();
-                    menus.style.display = "block";
-                    menus.style.left = e.pageX + "px";
-                    menus.style.top = e.pageY + "px";
-                    // 记录当前点击的数据ID（图片名称）
-                    window.localStorage.setItem("clickImgId", e.target.id);
-                    window.localStorage.setItem("clickImgSrc", e.target.src);
-                });
-            }
+            // 图片添加左键点击事件，显示大图
+            imageDiv.addEventListener("click", (e) => {
+              url = e.target.src;
+              fullscreenImage.src = url.replace("/thumb/", "/");
+              overlay.style.display = "block";
+            });
+            // 图片添加右键点击事件，显示管理菜单
+            imageDiv.addEventListener("contextmenu", (e) => {
+              // 阻止右键默认行为，并显示自定义菜单
+              e.preventDefault();
+              menus.style.display = "block";
+              menus.style.left = e.pageX + "px";
+              menus.style.top = e.pageY + "px";
+              // 记录当前点击的数据ID（图片名称）
+              window.localStorage.setItem("clickImgId", e.target.id);
+              window.localStorage.setItem("clickImgSrc", e.target.src);
+            });
+          }
         }
 
         if (nextShowNum >= imageList.length) {
-            document.getElementById("show-more").style.display = "none";
-            document.getElementById("show-all").style.display = "none";
+          document.getElementById("show-more").style.display = "none";
+          document.getElementById("show-all").style.display = "none";
         }
-        console.log(nextShowNum)
+        console.log(nextShowNum);
         // 变更当前标识，为下一次显示做准备
         nextIndex = nextShowNum;
         nextShowNum += 10;
-    }
+      }
 
-    function showMore() {
+      function showMore() {
         showImage(images);
-    }
-    function showAll(){
-        nextShowNum = images.length
+      }
+      function showAll() {
+        nextShowNum = images.length;
         showMore(images);
-    }
+      }
 
-    // 大图按钮
-    const showBig = document.getElementById('show-big');
-    showBig.addEventListener('click', () => {
-        fullscreenImage.src = window.localStorage.getItem("clickImgSrc");
-        overlay.style.display = 'block';
-    });
+      // 大图按钮
+      const showBig = document.getElementById("show-big");
+      showBig.addEventListener("click", () => {
+        url = window.localStorage.getItem("clickImgSrc");
+        fullscreenImage.src = url.replace("/thumb/", "/");
+        overlay.style.display = "block";
+      });
 
-    // 复制按钮
-    const copyUrl = document.getElementById('copy-url');
-    copyUrl.addEventListener('click', () => {
-        navigator.clipboard.writeText(window.localStorage.getItem("clickImgSrc"));
-        alertSuccess('复制成功', 2000);
-    });
+      // 复制按钮
+      const copyUrl = document.getElementById("copy-url");
+      copyUrl.addEventListener("click", () => {
+        url = window.localStorage.getItem("clickImgSrc");
+        realUrl = url.replace("/thumb/", "/");
+        navigator.clipboard.writeText(realUrl);
+        alertSuccess("复制成功", 2000);
+      });
 
-    // 删除按钮
-    const deleteMenu = document.getElementById('delete');
-    // 删除确认弹窗
-    const deletePrompt = document.getElementById('delete-prompt');
-    // 删除确认按钮
-    const confirmBtn = deletePrompt.querySelector("#confirmBtn");
-    let imageName;
-    deleteMenu.addEventListener('click', () => {
+      // 复制Markdown
+      const copyMarkdown = document.getElementById("copy-markdown");
+      copyMarkdown.addEventListener("click", () => {
+        url = window.localStorage.getItem("clickImgSrc");
+        realUrl = url.replace("/thumb/", "/");
+        navigator.clipboard.writeText(`![image](${realUrl})`);
+        alertSuccess("复制成功", 2000);
+      });
+
+      // 删除按钮
+      const deleteMenu = document.getElementById("delete");
+      // 删除确认弹窗
+      const deletePrompt = document.getElementById("delete-prompt");
+      // 删除确认按钮
+      const confirmBtn = deletePrompt.querySelector("#confirmBtn");
+      let imageName;
+      deleteMenu.addEventListener("click", () => {
         imageName = window.localStorage.getItem("clickImgId");
         if (typeof deletePrompt.showModal === "function") {
-            deletePrompt.showModal();
+          deletePrompt.showModal();
         } else {
-            deletePrompt.value = "Sorry, the <dialog> API is not supported by this browser.";
+          deletePrompt.value =
+            "Sorry, the <dialog> API is not supported by this browser.";
         }
-    });
+      });
 
-    // 清空图片名称
-    deletePrompt.addEventListener("close", () => {
+      // 清空图片名称
+      deletePrompt.addEventListener("close", () => {
         imageName = "";
-    });
+      });
 
-    // 确认删除，调用删除接口
-    confirmBtn.addEventListener('click', () => {
+      // 确认删除，调用删除接口
+      confirmBtn.addEventListener("click", () => {
         $.ajax({
-            url: baseApiUrl + "store/deleteImage?key=" + key + "&imageName=" + imageName,
-            type: "POST",
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            },
-            crossDomain: true,
-            processData: false, // 告诉jQuery不要去处理发送的数据
-            contentType: false, // 告诉jQuery不要去设置Content-Type请求头
-            success: function (data) {
-                if (data.code === 200) {
-                    alertSuccess(data.message, 2000);
-                    // 重新获取图片
-                    findImages()
-                } else {
-                    alertError(data.message, 2000);
-                }
-            },
-            error: function (data) {
-                alertError("System Error!", 2000);
+          url:
+            baseApiUrl +
+            "store/deleteImage?key=" +
+            key +
+            "&imageName=" +
+            imageName,
+          type: "POST",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+          crossDomain: true,
+          processData: false, // 告诉jQuery不要去处理发送的数据
+          contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+          success: function (data) {
+            if (data.code === 200) {
+              alertSuccess(data.message, 2000);
+              // 重新获取图片
+              findImages();
+            } else {
+              alertError(data.message, 2000);
             }
+          },
+          error: function (data) {
+            alertError("System Error!", 2000);
+          },
         });
-    });
+      });
 
-    function findImages() {
+      function findImages() {
         // 清空图片
-        imgContainer.html("")
+        imgContainer.html("");
         // 重置条件
         nextShowNum = 30;
         nextIndex = 0;
         document.getElementById("show-more").style.display = "inline-block";
         document.getElementById("show-all").style.display = "inline-block";
-        getImageList(key, $("#find").val())
-    }
-</script>
-</body>
+        getImageList(key, $("#find").val());
+      }
+    </script>
+  </body>
 </html>

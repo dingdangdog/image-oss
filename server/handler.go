@@ -186,6 +186,9 @@ func DeleteImageHandler(c *gin.Context) {
 		} else {
 			resultDTO.Message += err.Error()
 		}
+		// 删除缩略图
+		thumpPath := filepath.Join(config.ImagePath, config.UserMap[key], "thumb", imageName)
+		os.Remove(thumpPath)
 	}
 
 	c.JSON(http.StatusOK, resultDTO)

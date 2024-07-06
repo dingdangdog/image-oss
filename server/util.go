@@ -46,6 +46,7 @@ func addWatermark(fileInfo FileInfo, waterMark string) error {
 	rgba := image.NewRGBA(image.Rect(0, 0, imgWidth, imgHeight))
 	draw.Draw(rgba, rgba.Bounds(), img, image.Point{}, draw.Src)
 
+	// 德意黑字体
 	fontBytes, err := os.ReadFile("./font/SmileySans-Oblique.ttf")
 	if err != nil {
 		return fmt.Errorf("failed to read font file: %w", err)

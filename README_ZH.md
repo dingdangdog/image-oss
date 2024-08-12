@@ -1,3 +1,5 @@
+已过期，新项目：[Doimage](https://github.com/dingdangdog/Doimage)
+
 # image-oss
 
 [English](./README.md)  简体中文
